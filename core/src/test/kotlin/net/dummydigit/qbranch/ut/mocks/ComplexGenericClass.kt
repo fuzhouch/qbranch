@@ -6,6 +6,7 @@ package net.dummydigit.qbranch.ut.mocks
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
 import net.dummydigit.qbranch.generic.*
+import java.util.*
 
 // This file demonstrates the case that how a generic class is referenced
 // when creating instances.

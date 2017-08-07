@@ -9,7 +9,8 @@ import java.util.ArrayList
 import kotlin.reflect.KClass
 import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException
 import net.dummydigit.qbranch.types.isGenericClass
-import net.dummydigit.qbranch.types.isBondGeneratedStruct
+import net.dummydigit.qbranch.types.isQBranchGeneratedStruct
+import net.dummydigit.qbranch.types.isQBranchBuiltinType
 
 private class UnknownClassObjectCreator(objectClass : Class<*>) : ObjectCreatorAsAny {
     val cls = objectClass
@@ -33,18 +34,7 @@ private class GenericTypeObjectCreator<T>(objectClass : Class<T>, genericTypePar
     override fun newInstanceAsAny(): Any = newInstance() as Any
 
     override fun newInstance() : T {
-        // I seem failures when calling a Kotlin constructor with
-        // vararg in Kotlin 1.0. If we pass *typeParams as array,
-        // Kotlin constructor can only receive the first object,
-        // thus always complains NoSuchMethodException.
-        //
-        // I didn't find a way to fix it. Instead, I can only
-        // workaround it by letting generated definition
-        // (see unit test: StructWithGenericField)
-        // accept an Array<ObjectCreatorAsAny> as only parameter.
-        //
-        // Let's see if further version can fix it.
-        return cls.getConstructor(Array<ObjectCreatorAsAny>::class.java).newInstance(typeParams)
+        return cls.getDeclaredConstructor(Array<ObjectCreatorAsAny>::class.java).newInstance(typeParams)
     }
 }
 
@@ -54,7 +44,7 @@ private class GenericTypeObjectCreator<T>(objectClass : Class<T>, genericTypePar
  * @return An ObjectCreatorAsConcreteType<T> object to allow calling newInstance().
  */
 fun<T: Any> mkCreator(objectClass : Class<T>) : ObjectCreatorAsConcreteType<T> {
-    if (!objectClass.isBondGeneratedStruct()) {
+    if (!objectClass.isQBranchGeneratedStruct() && !objectClass.isQBranchBuiltinType()) {
         throw UnsupportedBondTypeException(objectClass)
     }
 
@@ -82,7 +72,7 @@ fun<T: Any> mkCreator(objectClass : KClass<T>) : ObjectCreatorAsConcreteType<T> 
  * @return An ObjectCreatorAsConcreteType<T> object to allow newInstance() on generic Bond structure.
  */
 fun<T: Any> mkCreator(genericClass : Class<T>, typeParams: Array<ObjectCreatorAsAny>) : ObjectCreatorAsConcreteType<T> {
-    if (!genericClass.isBondGeneratedStruct()) {
+    if (!genericClass.isQBranchGeneratedStruct()) {
         throw UnsupportedBondTypeException(genericClass)
     }
 

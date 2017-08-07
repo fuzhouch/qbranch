@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 /** A function to check if given class is a generated bond class.
  *  @return True if cls is Bond generated, or false if not.
  */
-fun Class<*>.isBondGeneratedStruct() : Boolean {
+fun Class<*>.isQBranchGeneratedStruct() : Boolean {
     val isBondGenerated = this.getAnnotation(QBranchGeneratedCode::class.java) != null
     return isBondGenerated && !this.isEnum
 }
@@ -33,6 +33,25 @@ fun Class<*>.isGenericClass() : Boolean {
  */
 fun KClass<*>.isGenericClass() : Boolean {
     return this.java.isGenericClass()
+}
+
+fun Class<*>.isQBranchBuiltinType() : Boolean = when (this) {
+    String::class.java -> true
+    Byte::class.java -> true
+    Short::class.java -> true
+    Int::class.java -> true
+    Long::class.java -> true
+    UnsignedByte::class.java -> true
+    UnsignedShort::class.java -> true
+    UnsignedInt::class.java -> true
+    UnsignedLong::class.java -> true
+    ByteString::class.java -> true
+    // TODO: Add container types later.
+    else -> false
+}
+
+fun KClass<*>.isQBranchBuiltinType() : Boolean {
+    return this.java.isQBranchBuiltinType()
 }
 
 /**

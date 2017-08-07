@@ -10,7 +10,7 @@ import java.util.*
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
-import net.dummydigit.qbranch.types.isBondGeneratedStruct
+import net.dummydigit.qbranch.types.isQBranchGeneratedStruct
 
 /**
  * Implementation that return deserialized struct as Object.
@@ -66,7 +66,7 @@ internal class StructDeserializer(inputCls : Class<*>, stringCharset : Charset) 
     }
 
     private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Unit {
-        if (!inputCls.isBondGeneratedStruct()) {
+        if (!inputCls.isQBranchGeneratedStruct()) {
             throw UnsupportedBondTypeException(inputCls)
         }
 

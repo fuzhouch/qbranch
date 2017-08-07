@@ -6,6 +6,7 @@ package net.dummydigit.qbranch.ut.mocks
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
 import net.dummydigit.qbranch.generic.ObjectCreatorAsAny
+import net.dummydigit.qbranch.generic.ObjectCreatorAsConcreteType
 import net.dummydigit.qbranch.generic.cast
 
 @QBranchGeneratedCode("gbc", "version.mock")
