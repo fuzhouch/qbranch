@@ -25,3 +25,4 @@ build/
 # Generated code of Bond IDL.
 bondschema/src/main/kotlin/bond/
 core/src/test/kotlin/qbranch/ut
+compiler/src/main/gen/

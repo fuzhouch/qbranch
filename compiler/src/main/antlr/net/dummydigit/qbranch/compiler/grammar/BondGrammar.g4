@@ -1,15 +1,23 @@
 grammar BondGrammar;
 
 @header {
-    package net.dummmydigit.qbranch.compiler.grammar;
+package net.dummydigit.qbranch.compiler.grammar;
 }
+
+bondDefContent : namespaceDecl ;
+// TODO: Should Bond body but put it later.
+namespaceDecl : singleNamespaceDecl moreNamespaceDecl ;
+singleNamespaceDecl : NAMESPACE_KEYWORD NAMESPACE_NAME ;
+moreNamespaceDecl : NEWLINE namespaceDecl
+                  | NEWLINE
+                  ;
 
 structBody : '{' '}' ;
 genericStructDef : '<' ID '>' structBody
                  | structBody ;
 structDef : STRUCT_TYPE_KEYWORD ID genericStructDef ;
 
-
+NAMESPACE_KEYWORD : 'namespace' ;
 SIGNED_INTEGER_TYPE_KEYWORD : 'int8' | 'int16' | 'int32' | 'int64' ;
 UNSIGNED_INTEGER_TYPE_KEYWORD : 'uint8' | 'uint16' | 'uint32' | 'uint64' ;
 FLOAT_POINT_TYPE_KEYWORD : 'float' | 'double' ;
@@ -27,4 +35,6 @@ STRUCT_TYPE_KEYWORD : 'struct' ;
 ENUM_TYPE_KEYWORD : 'enum' ;
 
 ID : [A-Za-z_][A-Za-z0-9_]* ;
-WS : [ \t\r\n]+ -> skip ;
+NAMESPACE_NAME : ID '.' ID ;
+WS : [ \t]+ -> skip ;
+NEWLINE : [\r\n]+ ;

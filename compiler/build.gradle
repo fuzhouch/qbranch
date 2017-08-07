@@ -1,6 +1,7 @@
 archivesBaseName = 'qbranch-compiler'
 
 apply plugin: 'antlr'
+apply plugin: 'kotlin'
 
 dependencies {
     antlr "org.antlr:antlr4:4.7"
