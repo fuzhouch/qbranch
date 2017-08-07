@@ -1,0 +1,10 @@
+archivesBaseName = 'qbranch-compiler'
+
+apply plugin: 'antlr'
+
+dependencies {
+    antlr "org.antlr:antlr4:4.7"
+    compile project(":base")
+    compile project(":bondschema")
+}
+
