@@ -27,22 +27,37 @@ differences:
 2. **Different feature set**. Due to resource limitation, QBranch does not
    try to implement every feature from Bond, while I pick some features
    useful based on my experience of using Bond. For example, QBranch
-   implements only CompactBinary protocol for now.
+   implements only CompactBinary protocol for now. I may add more
+   features based on feedbacks or my work experiences, but there's not
+   guarantee.
 
 3. **Different integration approach.** Bond/Java must follow existing
    design of Bond, e.g. it uses gbc as code generation tool. QBranch
    focus on only Java world, so I can use Java-based tools like ANTLR
    to implement a Bond compiler in Java, which provides better
-   integration when using it with other Java libraries.
+   integration when using it with other Java build systems like
+   Maven/Gradle.
 
 4. **Different design decisions.** As a result of learning Java/Kotlin
    reflection system, QBranch tries to implement Bond protocol, which
    requires minimal generated code but put most decoding/encoding logic
    in core code. Meanwhile, Bond/Java implements most encoding/decoding
    logic in generated code, which may cause performance gain over
-   QBranch (to be confirmed) but larger output.
+   QBranch (to be confirmed, really!) but larger output.
 
-So developers can choose them based on their own consideration.
+So developers can choose them based on their own consideration. If you
+want a complete feature set of Bond with official support, you may go
+with official Bond/Java. Or, if you care more about integration with
+Java world, you may consider QBranch.
+
+## Compatibility guarantee
+
+No matter how different it is, there's one goal that should be always
+kept: QBranch keeps protocol level compatibility with official Bond. Any
+byte buffer encoded by Microsoft Bond should be decoded by QBranch
+with same output, if the protocol is claimed supported by QBranch.
+QBranch will never introduce incompatible extension to existing Bond
+protocol.
 
 # Build QBranch
 
