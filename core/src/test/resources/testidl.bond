@@ -1,0 +1,17 @@
+namespace net.dummydigit.qbranch.ut
+
+struct PrimitiveStruct
+{
+    1: int8 int8value;
+    3: int16 int16value;
+    5: int32 int32value;
+    7: int64 int64value;
+    9: uint8 uint8value;
+    11: uint16 uint16value;
+    13: uint32 uint32value;
+    15: uint64 uint64value;
+    17: string stringvalue;
+    19: wstring wstringvalue;
+    21: float floatvalue;
+    23: double doublevalue;
+}

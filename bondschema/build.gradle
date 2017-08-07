@@ -1,0 +1,23 @@
+archivesBaseName = 'qbranch-bondschema'
+
+dependencies {
+    compile project(":base")
+}
+
+task compileBondIdlToKotlin(type:Exec) {
+    def gbcExePath = rootProject.gbcExePath
+    def bondIdlPath = rootProject.bondIdlPath
+
+    workingDir "${projectDir}/src/main/kotlin/bond"
+    commandLine "${gbcExePath}", "kotlin", \
+                '-i', "${bondIdlPath}/core", \
+                      "${bondIdlPath}/core/bond_const.bond",\
+                      "${bondIdlPath}/core/bond.bond", \
+                '-o', "${projectDir}/src/main/kotlin/bond"
+}
+
+sourceSets {
+  main.kotlin.srcDirs += 'src/main/kotlin/bond'
+}
+
+compileKotlin.dependsOn compileBondIdlToKotlin

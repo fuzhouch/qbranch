@@ -1,0 +1,19 @@
+archivesBaseName = 'qbranch-core'
+
+dependencies {
+    compile project(":base")
+    compile project(":bondschema")
+}
+
+task compileTestBondIdlToKotlin(type:Exec) {
+    def gbcExePath = rootProject.gbcExePath
+    def bondIdlPath = rootProject.bondIdlPath
+
+    workingDir "${projectDir}/src/test/kotlin/net/dummydigit/qbranch/ut"
+    commandLine "${gbcExePath}", "kotlin", \
+                '-i', "${bondIdlPath}/core", \
+                "${projectDir}/src/test/resources/testidl.bond", \
+                '-o', "${projectDir}/src/test/kotlin/net/dummydigit/qbranch/ut"
+}
+
+compileTestKotlin.dependsOn compileTestBondIdlToKotlin

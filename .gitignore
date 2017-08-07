@@ -1,0 +1,27 @@
+# Editors
+## Emacs
+*~
+\#*\#
+
+## Vim
+*.swp
+*.swo
+*.swm
+
+## VS Code
+/.vscode/
+
+# Gradle & IDEA IntelliJ
+.gradle
+.idea/
+mkCreator/
+bin/
+*.iml
+
+
+# Gradle
+build/
+
+# Generated code of Bond IDL.
+bondschema/src/main/kotlin/bond/
+core/src/test/kotlin/qbranch/ut
