@@ -1,6 +1,6 @@
-# Qbranch: Independent implementation of Microsoft Bond.
+# Qbranch: Alternative implementation of Microsoft Bond.
 
-This is my fun project of independent implementation of
+This is my fun project of alternative implementation of
 [Microsoft Bond](https://github.com/Microsoft/Bond). The project is
 trying to implement Bond protocol and API in Java. QBranch is
 mostly written in [Kotlin](https://kotlinlang.org) with a mix of 
