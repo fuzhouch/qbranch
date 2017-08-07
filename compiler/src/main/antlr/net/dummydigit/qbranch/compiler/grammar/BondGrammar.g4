@@ -4,18 +4,36 @@ grammar BondGrammar;
 package net.dummydigit.qbranch.compiler.grammar;
 }
 
-bondDefContent : namespaceDecl ;
-// TODO: Should Bond body but put it later.
+bondDef : importDecl namespaceDecl bondTypeDef;
 namespaceDecl : singleNamespaceDecl moreNamespaceDecl ;
 singleNamespaceDecl : NAMESPACE_KEYWORD NAMESPACE_NAME ;
 moreNamespaceDecl : NEWLINE namespaceDecl
                   | NEWLINE
                   ;
+importDecl : IMPORT_KEYWORD '"' IMPORT_PATH '"' moreImportDecl;
+moreImportDecl : NEWLINE importDecl
+               | NEWLINE
+               ;
 
-structBody : '{' '}' ;
-genericStructDef : '<' ID '>' structBody
-                 | structBody ;
-structDef : STRUCT_TYPE_KEYWORD ID genericStructDef ;
+bondTypeDef : structDef bondTypeDef
+            | enumDef bondTypeDef
+            ;
+
+structDef : structNameDef structBodyDef ;
+structNameDef : STRUCT_TYPE_KEYWORD ID ;
+structBodyDef : structGenericTypeArgsDecl structBody
+              | structBody
+              ;
+structGenericTypeArgsDecl : '<' typeArgsDeclList '>' ;
+typeArgsDeclList : ID moreTypeArgsDeclList;
+moreTypeArgsDeclList : ',' ID moreTypeArgsDeclList
+                     |
+                     ;
+
+structBody : '{' '}' ; // TODO: Incomplete
+
+enumDef : 'enum' ; // TODO: Incomplete
+
 
 NAMESPACE_KEYWORD : 'namespace' ;
 SIGNED_INTEGER_TYPE_KEYWORD : 'int8' | 'int16' | 'int32' | 'int64' ;
@@ -24,17 +42,13 @@ FLOAT_POINT_TYPE_KEYWORD : 'float' | 'double' ;
 CONTAINER_TYPE_KEYWORD : 'vector' | 'list' | 'map' ;
 BYTESTRING_TYPE_KEYWORD : 'string' ;
 WSTRING_TYPE_KEYWORD : 'wstring' ;
-
-BUILTIN_TYPE_KEYWORD : SIGNED_INTEGER_TYPE_KEYWORD | UNSIGNED_INTEGER_TYPE_KEYWORD
-                     | BYTESTRING_TYPE_KEYWORD | WSTRING_TYPE_KEYWORD
-                     | FLOAT_POINT_TYPE_KEYWORD |
-                     | CONTAINER_TYPE_KEYWORD
-                     ;
-
+IMPORT_KEYWORD : 'import' ;
+IMPORT_PATH : [A-Za-z.\\/][A-Za-z.\\/]* ;
+NAMESPACE_DELIMITER : '.' ;
 STRUCT_TYPE_KEYWORD : 'struct' ;
 ENUM_TYPE_KEYWORD : 'enum' ;
 
+NAMESPACE_NAME : [A-Za-z_][A-Za-z0-9_]*(NAMESPACE_DELIMITER [A-Za-z_][A-Za-z0-9_]*)* ;
 ID : [A-Za-z_][A-Za-z0-9_]* ;
-NAMESPACE_NAME : ID '.' ID ;
 WS : [ \t]+ -> skip ;
 NEWLINE : [\r\n]+ ;
