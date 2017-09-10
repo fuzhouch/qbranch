@@ -5,7 +5,12 @@ apply plugin: 'kotlin'
 
 dependencies {
     antlr "org.antlr:antlr4:4.7"
-    compile project(":base")
-    compile project(":bondschema")
 }
 
+generateGrammarSource {
+    arguments += [ "-package", "net.dummydigit.qbranch.compiler.grammar" ]
+
+}
+
+// Required to allow we implement main logic in Kotlin.
+compileKotlin.dependsOn generateGrammarSource

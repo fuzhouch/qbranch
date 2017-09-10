@@ -10,21 +10,18 @@ import org.junit.Test;
 public class JObjectCreatorTest {
     @Test(expected=UnsupportedBondTypeException.class)
     public void testThrowExceptionOnNonBondGenerated() {
-        ObjectCreatorAsConcreteType<InvalidBondGenerated> creator =
-                ObjectCreator.mkCreator(InvalidBondGenerated.class);
+        ObjectCreator.mkCreator(InvalidBondGenerated.class);
     }
 
     @Test(expected=UnsupportedBondTypeException.class)
     public void testThrowExceptionWhenPassingGenericClassToNonGenericBuilder() {
-        ObjectCreatorAsConcreteType<StructWithGenericField> creator =
-                ObjectCreator.mkCreator(StructWithGenericField.class);
+        ObjectCreator.mkCreator(StructWithGenericField.class);
     }
 
     @Test(expected=UnsupportedBondTypeException.class)
     public void testThrowExceptionWhenPassingNonGenericClassToGenericBuilder() {
-        ObjectCreatorAsConcreteType<AllPrimitiveTypes> creator =
-                ObjectCreator.mkCreator(AllPrimitiveTypes.class,
-                        ObjectCreator.toJTypeArgs(new Class[] { JObjectCreatorTest.class }));
+        ObjectCreator.mkCreator(AllPrimitiveTypes.class,
+                ObjectCreator.toJTypeArgs(new Class[] { JObjectCreatorTest.class }));
     }
 
     @Test

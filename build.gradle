@@ -3,43 +3,44 @@
 // for full license information.
 
 buildscript {
-    ext.kotlin_version = '1.0.6'
+    ext.kotlin_version = '1.1.4-2'
     repositories {
         mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.6'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-2'
     }
 }
 
 subprojects {
     apply plugin: 'kotlin'
-    group = 'net.dummydigit.qbranch'
-    version = '0.1-SNAPSHOT'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    apply plugin: 'maven'
+    apply plugin: 'signing'
+
+    group = 'net.dummydigit'
+    version = rootProject.file('version.txt').text.trim()
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.6'
+        compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-2'
         // In most cases, Java reflection is good enough. Leave
         // kotlin-reflect here just in case sometimes we may need it in
         // the future.
-        // compile 'org.jetbrains.kotlin:kotlin-reflect:1.0.6'
+        // compile 'org.jetbrains.kotlin:kotlin-reflect:1.1.4'
         testCompile 'junit:junit:4.12'
     }
 
     test {
-        testLogging.showStandardStreams = project.hasProperty("testOutput")? true : false
+        testLogging.showStandardStreams = project.hasProperty("testOutput")
     }
 
     jar {
         manifest {
-            attributes("Implementation-Title": "Gradle")
+            attributes("Implementation-Title": "qbranch")
             attributes("Implementation-Version": version)
         }
     }
@@ -47,7 +48,71 @@ subprojects {
     compileTestJava {
         options.compilerArgs += [ "-Xlint:unchecked" ]
     }
-}
+
+    // For publishing to Maven central.
+    task javadocJar(type : Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type : Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+      repositories {
+        mavenDeployer {
+          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+          repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: ossrhUsername, password: ossrhPassword)
+          }
+
+          snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            authentication(userName: ossrhUsername, password: ossrhPassword)
+          }
+
+          pom.project {
+            name 'qbranch'
+            packaging 'jar'
+            // optionally artifactId can be defined here
+            description 'An alternative implementation of Microsoft Bond for JVM.'
+            url 'https://github.com/fuzhouch/qbranch'
+
+            scm {
+              connection 'scm:svn:https://github.com/fuzhouch/qbranch.git'
+              developerConnection 'scm:git:https://github.com/fuzhouch/qbranch.git'
+              url 'https://github.com/fuzhouch/qbranch.git'
+            }
+
+            licenses {
+              license {
+                name 'MIT License'
+                url 'https://github.com/fuzhouch/qbranch/blob/master/LICENSE'
+              }
+            }
+
+            developers {
+              developer {
+                id 'fuzhouch'
+                name 'Fuzhou Chen'
+                email 'fuzhouch@gmail.com'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
 // TODO We still hold a dependency to Microsoft Bond
 // source code base to get gbc executable and idl definitions.
@@ -67,3 +132,9 @@ println "BondIdlPath=${bondIdlPath}"
 project.ext.set("gbcExePath", gbcExePath)
 project.ext.set("bondIdlPath", bondIdlPath)
 
+
+// TODO
+// Add maven-publish steps from below post. We need to try publishing
+// to maven repo.
+// http://nemerosa.ghost.io/2015/07/01/publishing-to-the-maven-central-using-gradle/
+// http://mike-neck.github.io/blog/2013/06/21/how-to-publish-artifacts-with-gradle-maven-publish-plugin-version-1-dot-6/

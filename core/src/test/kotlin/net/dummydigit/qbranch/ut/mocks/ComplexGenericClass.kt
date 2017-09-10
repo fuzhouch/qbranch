@@ -25,8 +25,7 @@ open class C2<T : Any>(typeArgs : Array<ObjectCreatorAsAny>) {
 
 // Case 1: Generic class used as base class
 @QBranchGeneratedCode("gbc", "version.mock")
-open class D1 : C2<C1<Int, String>>(arrayOf(mkCreator(C1::class, toKTypeArgsV(Int::class, String::class)))) {
-}
+open class D1 : C2<C1<Int, String>>(arrayOf(mkCreator(C1::class, toKTypeArgsV(Int::class, String::class))))
 
 // Case 2: Generic class used as field
 // D2 can either Bond generated class, or handwritten
