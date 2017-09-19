@@ -31,7 +31,7 @@ internal object ParsingUtil {
             "blob")
 
     val bondIdlContainerType = setOf(
-            "vector", "list", "map", "nullable", "bonded"
+            "vector", "list", "map", "set", "nullable", "bonded"
     )
 
     val bondIdlKvpContainerType = setOf("map")

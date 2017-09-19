@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class FileTargetCodeSaver(val settings: Settings) : TargetCodeSaver {
+class FileTargetCodeSaver(private val settings: Settings) : TargetCodeSaver {
     override fun openStream(sourceName: String): OutputStream {
         return Files.newOutputStream(resolvePathInternal(sourceName))
     }

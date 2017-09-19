@@ -123,7 +123,7 @@ ENUM_TYPE_KEYWORD : 'enum'WS+ ;
 SIGNED_INTEGER_TYPE_KEYWORD : 'int8' | 'int16' | 'int32' | 'int64' ;
 UNSIGNED_INTEGER_TYPE_KEYWORD : 'uint8' | 'uint16' | 'uint32' | 'uint64' ;
 FLOAT_POINT_TYPE_KEYWORD : 'float' | 'double' ;
-CONTAINER_TYPE_KEYWORD : 'vector' | 'list' | 'map' | 'nullable' ;
+CONTAINER_TYPE_KEYWORD : 'vector' | 'list' | 'map' | 'set' | 'nullable' ;
 BYTESTRING_TYPE_KEYWORD : 'string' ;
 WSTRING_TYPE_KEYWORD : 'wstring' ;
 NON_CONTAINER_TYPE_KEYWORD : SIGNED_INTEGER_TYPE_KEYWORD
