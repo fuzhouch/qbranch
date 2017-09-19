@@ -29,9 +29,10 @@ internal class KotlinTranslator(settings : Settings) : Translator {
     )
 
     val builtinContainerMap = hashMapOf(
-            "vector" to "java.util.ArrayList",
-            "list" to "java.util.LinkedList",
-            "map" to "java.util.HashMap"
+            "vector" to "ArrayList",
+            "list" to "MutableList",
+            "map" to "MutableMap",
+            "set" to "MutableList"
     )
 
     val defaultValueForBuiltinType = hashMapOf(
@@ -48,8 +49,9 @@ internal class KotlinTranslator(settings : Settings) : Translator {
             "float" to "0.0f",
             "double" to "0.0",
             "vector" to "arrayListOf()",
-            "list" to "java.util.LinkedList()",
-            "map" to "hashMapOf()"
+            "list" to "mutableListOf",
+            "map" to "mutableMapOf()",
+            "set" to "mutableSetOf()"
     )
 
     override fun generateHeader(): String {
