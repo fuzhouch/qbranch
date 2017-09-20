@@ -1,1 +1,0 @@
-Hold generated Bond source code.

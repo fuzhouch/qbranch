@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.utils;
 
-import bond.BondDataType;
+import net.dummydigit.qbranch.BondDataType;
 
 /**
  * Represent field information.

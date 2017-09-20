@@ -3,7 +3,6 @@
 
 package net.dummydigit.qbranch
 
-import bond.BondDataType
 import net.dummydigit.qbranch.types.*
 
 /**

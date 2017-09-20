@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.utils;
 
-import bond.BondDataType;
+import net.dummydigit.qbranch.BondDataType;
 import java.io.IOException;
 import java.io.InputStream;
 import net.dummydigit.qbranch.exceptions.EndOfStreamException;

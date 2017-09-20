@@ -3,10 +3,10 @@
 
 package net.dummydigit.qbranch.protocols
 
-import bond.BondDataType
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
+import net.dummydigit.qbranch.BondDataType
 import net.dummydigit.qbranch.exceptions.EndOfStreamException
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException
 import net.dummydigit.qbranch.types.*

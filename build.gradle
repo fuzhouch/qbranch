@@ -110,25 +110,6 @@ subprojects {
     }
   }
 
-// TODO We still hold a dependency to Microsoft Bond
-// source code base to get gbc executable and idl definitions.
-// We will do the following:
-// 1. Add Microsoft Bond as a submodule to get IDL definition, and
-// 2. Finally remove dependency to gbc.exe when adding our own
-//    compiler
-def gbcExePath = project.hasProperty("bondCompilerPath")? \
-                 bondCompilerPath : \
-                 "${projectDir}/../ktbond/build/compiler/build/gbc/gbc"
-println "BondCompilerPath=${gbcExePath}"
-
-def bondIdlPath = project.hasProperty("bondIdlPath")? \
-                  bondIdlPath : \
-                  "${projectDir}/../ktbond/idl/bond"
-println "BondIdlPath=${bondIdlPath}"
-project.ext.set("gbcExePath", gbcExePath)
-project.ext.set("bondIdlPath", bondIdlPath)
-
-
 // TODO
 // Add maven-publish steps from below post. We need to try publishing
 // to maven repo.
