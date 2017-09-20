@@ -5,6 +5,7 @@ package net.dummydigit.qbranch.protocols
 
 import net.dummydigit.qbranch.BondDataType
 import net.dummydigit.qbranch.types.*
+import net.dummydigit.qbranch.utils.ContainerHeaderInfo
 import net.dummydigit.qbranch.utils.FieldInfo
 
 /**
@@ -24,6 +25,7 @@ interface TaggedProtocolReader {
     fun readUTF16LEString() : String
     fun readFloat() : Float
     fun readDouble() : Double
+    fun readContainerHeader() : ContainerHeaderInfo
     fun parseNextField(): FieldInfo
     fun skipField(dataType : BondDataType): Unit
 }

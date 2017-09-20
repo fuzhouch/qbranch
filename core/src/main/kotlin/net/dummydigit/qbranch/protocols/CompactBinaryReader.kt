@@ -11,6 +11,7 @@ import net.dummydigit.qbranch.exceptions.EndOfStreamException
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException
 import net.dummydigit.qbranch.types.*
 import net.dummydigit.qbranch.utils.CompactBinaryFieldInfo
+import net.dummydigit.qbranch.utils.ContainerHeaderInfo
 import net.dummydigit.qbranch.utils.VariableLength
 import net.dummydigit.qbranch.utils.ZigZag
 
@@ -71,7 +72,11 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
         return ByteBuffer.wrap(doubleAsBytes).double
     }
 
-    override fun skipField(dataType : BondDataType): Unit {
+    override fun readContainerHeader() : ContainerHeaderInfo {
+        return CompactBinaryFieldInfo.decodeContainerHeaderV1(input)
+    }
+
+    override fun skipField(dataType : BondDataType) {
         when (dataType) {
             BondDataType.BT_BOOL -> input.read()
             BondDataType.BT_UINT8 -> input.read()

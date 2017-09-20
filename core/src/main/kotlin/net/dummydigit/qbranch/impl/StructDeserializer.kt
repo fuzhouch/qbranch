@@ -1,21 +1,24 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch
+package net.dummydigit.qbranch.impl
 
+import net.dummydigit.qbranch.BondDataType
 import net.dummydigit.qbranch.annotations.FieldId
+import net.dummydigit.qbranch.exceptions.InvalidStructException
 import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 import net.dummydigit.qbranch.types.*
 import java.lang.reflect.Field
 import java.util.*
 
-internal class StructDeserializerImpl(val cls : Class<*>,
-                                      private val isBaseClass : Boolean) {
-
+internal class StructDeserializer(val cls : Class<*>,
+                                  private val isBaseClass : Boolean) : DeserializerBase {
+    private val fieldsByName = HashMap<String, Field>()
+    private val creatorFieldsByName = HashMap<String, Field>()
     private val declaredFieldDeserializerMap = buildDeclaredFieldDeserializer(cls)
 
-    fun deserialize(preCreatedObj: Any, reader: TaggedProtocolReader) {
+    override fun deserialize(preCreatedObj: Any, reader: TaggedProtocolReader) {
         val stopSign = if (isBaseClass) {
             BondDataType.BT_STOP_BASE
         } else {
@@ -46,16 +49,26 @@ internal class StructDeserializerImpl(val cls : Class<*>,
     private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, StructFieldSetter> {
 
         val fieldDeserializerMap = HashMap<Int, StructFieldSetter>()
-
         inputCls.declaredFields.forEach {
-            val fieldIdAnnotation = it.getDeclaredAnnotation(FieldId::class.java)
+            fieldsByName[it.name] = it
+            it.isAccessible = true
+        }
+
+        fieldsByName.forEach {
+            val fieldIdAnnotation = it.value.getDeclaredAnnotation(FieldId::class.java)
             if (fieldIdAnnotation != null) {
-                it.isAccessible = true
+                val creatorFieldName = "${it.key}_QTypeArg"
+                val creatorField = fieldsByName[creatorFieldName]
+                if (creatorField != null) {
+                    creatorFieldsByName[it.key] = creatorField
+                    it.value.isAccessible = true
+                }
                 val fieldId = fieldIdAnnotation.id
-                val fieldSetter = createFieldSetter(it, fieldId)
+                val fieldSetter = createFieldSetter(it.value, fieldId)
                 fieldDeserializerMap[fieldId] = fieldSetter
             }
         }
+
         return fieldDeserializerMap
     }
 
@@ -74,7 +87,17 @@ internal class StructDeserializerImpl(val cls : Class<*>,
             String::class.java -> StructFieldSetter.UTF16LEString(field)
             Float::class.java -> StructFieldSetter.Float(field)
             Double::class.java -> StructFieldSetter.Double(field)
-            else -> throw UnsupportedBondTypeException(field.type, id)
+            /*ArrayList::class.java -> {
+                val creatorField = creatorFieldsByName[field.name]
+                        ?: throw InvalidStructException(field.name, "CreatorFieldNotFound")
+                StructFieldSetter.Vector(field, creatorField)
+            }*/
+            // ArrayList, MutableList and MutableSet : I need container length and element type.
+            // MutableMap : I need container length, key/value type.
+            else -> {
+                val fieldDeserializer = StructDeserializer(field.type, false)
+                StructFieldSetter.Struct(field, fieldDeserializer)
+            }
         }
     }
 }

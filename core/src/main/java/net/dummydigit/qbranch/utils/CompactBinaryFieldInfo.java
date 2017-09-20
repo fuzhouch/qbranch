@@ -7,6 +7,7 @@ import net.dummydigit.qbranch.BondDataType;
 import java.io.IOException;
 import java.io.InputStream;
 import net.dummydigit.qbranch.exceptions.EndOfStreamException;
+import net.dummydigit.qbranch.types.UnsignedInt;
 
 /**
  * A helper class to extract field type Id from binary stream.
@@ -44,5 +45,12 @@ public class CompactBinaryFieldInfo extends FieldInfo {
             }
         }
         typeId = BondDataType.values()[_typeId];
+    }
+
+    public static ContainerHeaderInfo decodeContainerHeaderV1(InputStream stream) throws IOException {
+        byte oneByte = (byte)stream.read();
+        BondDataType containerType = BondDataType.values()[oneByte & 0x1F];
+        UnsignedInt containerLength = VariableLength.decodeVarUInt32(stream);
+        return new ContainerHeaderInfo(containerType, containerLength.getValue(), 1);
     }
 }

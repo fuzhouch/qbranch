@@ -4,7 +4,4 @@
 package net.dummydigit.qbranch.exceptions
 
 class EndOfStreamException(expectedLen: Int, actualLen: Int):
-        Exception("UnexpectedEndOfStream:expected=$expectedLen,actual=$actualLen") {
-    val expectedLength = expectedLen
-    val returnedLength = actualLen
-}
+        RuntimeException("UnexpectedEndOfStream:expected=$expectedLen,actual=$actualLen")

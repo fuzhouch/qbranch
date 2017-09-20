@@ -4,10 +4,9 @@
 package net.dummydigit.qbranch
 
 import kotlin.reflect.KClass
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 import net.dummydigit.qbranch.generic.StructT
+import net.dummydigit.qbranch.impl.StructDeserializer
 
 /**
  * Deserialize objects of given type.
@@ -34,11 +33,11 @@ class Deserializer<T : QBranchSerializable>(private val instanceCreator: StructT
         return obj
     }
 
-    private fun buildDeserializerInternal() : List<StructDeserializerImpl> {
-        val deserializers = arrayListOf(StructDeserializerImpl(cls, false))
+    private fun buildDeserializerInternal() : List<StructDeserializer> {
+        val deserializers = arrayListOf(StructDeserializer(cls, false))
         var superClass = cls.superclass
         while (superClass != Object::class.java) {
-            deserializers.add(StructDeserializerImpl(superClass, true))
+            deserializers.add(StructDeserializer(superClass, true))
             superClass = cls.superclass
         }
         return deserializers.reversed() // Start from base class
