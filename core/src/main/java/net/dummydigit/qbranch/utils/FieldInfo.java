@@ -9,14 +9,14 @@ import net.dummydigit.qbranch.BondDataType;
  * Represent field information.
  */
 public class FieldInfo {
-    protected int m_fieldId = 0;
-    protected BondDataType m_typeId = BondDataType.BT_STOP;
+    int fieldId = 0;
+    BondDataType typeId = BondDataType.BT_STOP;
 
     public int getFieldId() {
-        return m_fieldId;
+        return fieldId;
     }
 
     public BondDataType getTypeId() {
-        return m_typeId;
+        return typeId;
     }
 }

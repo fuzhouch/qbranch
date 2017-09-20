@@ -20,7 +20,7 @@ public class ZigZag {
      * @param uByte Unsigned int8 value.
      * @return Matched signed int8.
      */
-    public static byte unsignedToSigned8(UnsignedByte uByte) {
+    static byte unsignedToSigned8(UnsignedByte uByte) {
         short value = uByte.getValue();
         return (byte)((value >> 1) ^ (~( value & 1 ) + 1));
     }
@@ -30,7 +30,7 @@ public class ZigZag {
      * @param value Signed int8 value.
      * @return Matched unsigned int8.
      */
-    public static UnsignedByte signedToUnsigned8(byte value) {
+    static UnsignedByte signedToUnsigned8(byte value) {
         return new UnsignedByte((short)((value << 1) ^ (value >> 7)));
     }
 
@@ -49,7 +49,7 @@ public class ZigZag {
      * @param value Signed int16 value.
      * @return Matched unsigned int16.
      */
-    public static UnsignedShort signedToUnsigned16(short value) {
+    static UnsignedShort signedToUnsigned16(short value) {
         return new UnsignedShort(((value << 1) ^ (value >> 15)));
     }
 
@@ -68,7 +68,7 @@ public class ZigZag {
      * @param value Signed int32 value.
      * @return Matched unsigned int32.
      */
-    public static UnsignedInt signedToUnsigned32(int value) {
+    static UnsignedInt signedToUnsigned32(int value) {
         return new UnsignedInt((long)((value << 1) ^ (value >> 31)));
     }
 
@@ -88,7 +88,7 @@ public class ZigZag {
      * @param value Signed int64 value.
      * @return Matched unsigned int64.
      */
-    public static UnsignedLong signedToUnsigned64(long value) {
+    static UnsignedLong signedToUnsigned64(long value) {
         BigInteger left = BigInteger.valueOf(value).shiftLeft(1);
         BigInteger right = BigInteger.valueOf(value >> 63);
         return new UnsignedLong(left.xor(right));
