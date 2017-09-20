@@ -1,5 +1,1 @@
 archivesBaseName = 'qbranch-core'
-
-dependencies {
-    compile project(":base")
-}
