@@ -3,9 +3,14 @@
 
 package net.dummydigit.qbranch.generic
 
-import kotlin.reflect.KClass
+import net.dummydigit.qbranch.QBranchSerializable
 
-class StructT<out T : Any>(private val instanceCreator : () -> T) : TypeArg<T> {
-    constructor(cls : KClass<T>) : this({ cls.java.newInstance() })
+class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T) : TypeArg<T> {
+    constructor(targetCls : Class<T>) : this({ targetCls.newInstance() })
+
+    private val refObj = instanceCreator()
+    private val cls = refObj.javaClass
+
     override fun newInstance() = instanceCreator()
+    fun getJClass() : Class<T> = cls
 }

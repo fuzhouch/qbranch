@@ -10,9 +10,7 @@ import java.io.FileReader;
 import java.math.BigInteger;
 import javax.xml.bind.DatatypeConverter;
 import net.dummydigit.qbranch.Deserializer;
-import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException;
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException;
-import net.dummydigit.qbranch.ut.mocks.InvalidBondGenerated;
 import net.dummydigit.qbranch.ut.PrimitiveStruct;
 
 import org.junit.Assert;
@@ -58,11 +56,6 @@ public class CompactBinaryReaderTest {
 
         Assert.assertEquals(123.456, primitiveStruct.getFloatvalue(), 0.00001);
         Assert.assertEquals(654.321, primitiveStruct.getDoublevalue(), 0.00001);
-    }
-
-    @Test(expected=UnsupportedBondTypeException.class)
-    public void testThrowExceptionOnBadClass() throws UnsupportedBondTypeException {
-        Deserializer<InvalidBondGenerated> deserializer = new Deserializer<>(InvalidBondGenerated.class);
     }
 
     @Test(expected=UnsupportedVersionException.class)

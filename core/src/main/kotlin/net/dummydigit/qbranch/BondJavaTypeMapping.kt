@@ -6,9 +6,9 @@ package net.dummydigit.qbranch
 import net.dummydigit.qbranch.types.*
 
 /**
- * A mapping to allow
+ * A mapping to pick correct class from BT_* type.
  */
-object BondJavaTypeMapping {
+internal object BondJavaTypeMapping {
     val bondTagToBuiltInType = hashMapOf(
             BondDataType.BT_BOOL to Boolean::class.java,
             BondDataType.BT_UINT8 to UnsignedByte::class.java,

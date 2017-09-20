@@ -3,13 +3,14 @@
 
 package net.dummydigit.qbranch.ut.mocks
 
+import net.dummydigit.qbranch.QBranchSerializable
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
 import net.dummydigit.qbranch.types.*
 
 // A mock class to test primitive types
 @QBranchGeneratedCode("gbc", "version.mock")
-open class AllPrimitiveTypes {
+open class AllPrimitiveTypes : QBranchSerializable {
     @FieldId(0) var fieldByte : Byte = 1
     @FieldId(1) var fieldShort : Short = 2
     @FieldId(2) var fieldInt : Int = 3

@@ -5,9 +5,10 @@ package net.dummydigit.qbranch.ut.mocks
 
 import net.dummydigit.qbranch.annotations.*
 import net.dummydigit.qbranch.generic.*
+import net.dummydigit.qbranch.QBranchSerializable
 
 @QBranchGeneratedCode("mock", "version.mock")
-class GenericType<T1 : Any, T2 : Any>(tArgT1 : TypeArg<T1>, tArgT2 : TypeArg<T2>) {
+class GenericType<T1 : Any, T2 : Any>(tArgT1 : TypeArg<T1>, tArgT2 : TypeArg<T2>) : QBranchSerializable{
     @Transient private val fieldT1Creator = tArgT1
     @Transient private val fieldT2Creator = tArgT2
     @Transient private val vectorT1Creator = VectorT(tArgT1)

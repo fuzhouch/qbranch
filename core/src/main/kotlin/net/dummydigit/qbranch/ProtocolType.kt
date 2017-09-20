@@ -6,7 +6,7 @@ package net.dummydigit.qbranch
 /**
  * A manually written protocol type enum to replace official Bond definition.
  */
-enum class ProtocolType(val num : Int) {
+internal enum class ProtocolType(val num : Int) {
     MARSHALED_PROTOCOL(0),
     COMPACT_PROTOCOL(16963)
 }

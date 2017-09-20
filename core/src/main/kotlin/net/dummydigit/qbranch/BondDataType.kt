@@ -6,8 +6,7 @@ package net.dummydigit.qbranch
 /**
  * A manually created enum as replacement of built-in BondDataType definition.
  */
-enum class BondDataType(val num : Int)
-{
+enum class BondDataType(val num : Int) {
     BT_STOP(0),
     BT_STOP_BASE(1),
     BT_BOOL(2),

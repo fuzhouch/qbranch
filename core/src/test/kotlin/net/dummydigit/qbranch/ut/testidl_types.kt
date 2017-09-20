@@ -13,13 +13,14 @@
 
 package net.dummydigit.qbranch.ut
 
+import net.dummydigit.qbranch.QBranchSerializable
 import net.dummydigit.qbranch.annotations.*
 import net.dummydigit.qbranch.types.*
 
 
 
 @QBranchGeneratedCode("gbc", "0.8.0.0")
-open class PrimitiveStruct
+open class PrimitiveStruct : QBranchSerializable
 {
     @FieldId(1) var int8value : Byte = 0
 
