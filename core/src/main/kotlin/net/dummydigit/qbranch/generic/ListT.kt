@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.generic
 
-class ListT<E : Any>(private val elementT: TypeArg<E>) : TypeArg<MutableList<E>>, ContainerTypeArg<E> {
+class ListT<E : Any>(private val elementT: QTypeArg<E>) : QTypeArg<MutableList<E>>, ContainerTypeArg<E> {
     override fun newInstance(): MutableList<E> = mutableListOf()
     override fun newElement(): E = elementT.newInstance()
 }

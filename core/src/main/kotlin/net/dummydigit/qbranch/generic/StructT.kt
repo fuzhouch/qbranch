@@ -5,7 +5,7 @@ package net.dummydigit.qbranch.generic
 
 import net.dummydigit.qbranch.QBranchSerializable
 
-class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T) : TypeArg<T> {
+class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T) : QTypeArg<T> {
     constructor(targetCls : Class<T>) : this({ targetCls.newInstance() })
 
     private val refObj = instanceCreator()

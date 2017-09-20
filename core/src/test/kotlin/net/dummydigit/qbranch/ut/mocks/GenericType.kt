@@ -8,22 +8,22 @@ import net.dummydigit.qbranch.generic.*
 import net.dummydigit.qbranch.QBranchSerializable
 
 @QBranchGeneratedCode("mock", "version.mock")
-class GenericType<T1 : Any, T2 : Any>(tArgT1 : TypeArg<T1>, tArgT2 : TypeArg<T2>) : QBranchSerializable{
-    @Transient private val fieldT1Creator = tArgT1
-    @Transient private val fieldT2Creator = tArgT2
-    @Transient private val vectorT1Creator = VectorT(tArgT1)
-    @Transient private val mapT1T2Creator = MapT(tArgT1, tArgT2)
-    @Transient private val setIntFieldCreator = SetT(BuiltinTypeArg.Int32T)
+class GenericType<T1 : Any, T2 : Any>(tArgT1 : QTypeArg<T1>, tArgT2 : QTypeArg<T2>) : QBranchSerializable{
+    @Transient private val fieldT1_QTypeArg = tArgT1
+    @Transient private val fieldT2_QTypeArg = tArgT2
+    @Transient private val vectorT1_QTypeArg = VectorT(tArgT1)
+    @Transient private val mapT1T2_QTypeArg = MapT(tArgT1, tArgT2)
+    @Transient private val setIntField_QTypeArg = SetT(BuiltinQTypeArg.Int32T)
 
     companion object {
-        @JvmStatic fun <T1 : Any, T2 : Any> asQTypeArg(tArgT1 : TypeArg<T1>, tArgT2 : TypeArg<T2>) : TypeArg<GenericType<T1, T2>> {
+        @JvmStatic fun <T1 : Any, T2 : Any> asQTypeArg(tArgT1 : QTypeArg<T1>, tArgT2 : QTypeArg<T2>) : QTypeArg<GenericType<T1, T2>> {
             return StructT({ GenericType(tArgT1, tArgT2) })
         }
     }
 
-    @FieldId(0) @JvmField var fieldT1 : T1 = fieldT1Creator.newInstance()
-    @FieldId(1) @JvmField var fieldT2 : T2 = fieldT2Creator.newInstance()
-    @FieldId(2) @JvmField var vectorT1 : ArrayList<T1> = vectorT1Creator.newInstance()
-    @FieldId(3) @JvmField var mapT1T2 : MutableMap<T1, T2> = mapT1T2Creator.newInstance()
-    @FieldId(4) @JvmField var setIntField : MutableSet<Int> = setIntFieldCreator.newInstance()
+    @FieldId(0) @JvmField var fieldT1 : T1 = fieldT1_QTypeArg.newInstance()
+    @FieldId(1) @JvmField var fieldT2 : T2 = fieldT2_QTypeArg.newInstance()
+    @FieldId(2) @JvmField var vectorT1 : ArrayList<T1> = vectorT1_QTypeArg.newInstance()
+    @FieldId(3) @JvmField var mapT1T2 : MutableMap<T1, T2> = mapT1T2_QTypeArg.newInstance()
+    @FieldId(4) @JvmField var setIntField : MutableSet<Int> = setIntField_QTypeArg.newInstance()
 }

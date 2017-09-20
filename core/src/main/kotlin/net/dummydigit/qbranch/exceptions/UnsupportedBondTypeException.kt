@@ -4,6 +4,4 @@
 
 package net.dummydigit.qbranch.exceptions
 
-class UnsupportedBondTypeException(klass : Class<*>) : Exception("type=${klass.name}") {
-    val cls = klass
-}
+class UnsupportedBondTypeException(cls : Class<*>, id : Int) : Exception("type=${cls.name},id=$id")

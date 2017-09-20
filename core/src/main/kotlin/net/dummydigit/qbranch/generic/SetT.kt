@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.generic
 
-class SetT<E : Any>(private val elementT: TypeArg<E>) : TypeArg<MutableSet<E>>, ContainerTypeArg<E> {
+class SetT<E : Any>(private val elementT: QTypeArg<E>) : QTypeArg<MutableSet<E>>, ContainerTypeArg<E> {
     override fun newInstance(): MutableSet<E> = mutableSetOf()
     override fun newElement(): E = elementT.newInstance()
 }

@@ -3,6 +3,6 @@
 
 package net.dummydigit.qbranch.generic
 
-interface TypeArg<out T : Any> {
+interface QTypeArg<out T : Any> {
     fun newInstance() : T
 }

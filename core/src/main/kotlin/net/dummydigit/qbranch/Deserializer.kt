@@ -8,39 +8,39 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 import net.dummydigit.qbranch.generic.StructT
-import net.dummydigit.qbranch.generic.TypeArg
 
 /**
  * Deserialize objects of given type.
  */
-class Deserializer<T : QBranchSerializable>(private val instanceCreator: TypeArg<T>,
-                                            private val charset: Charset) {
-    constructor(instanceCreator: TypeArg<T>) : this(instanceCreator, StandardCharsets.UTF_8)
+class Deserializer<T : QBranchSerializable>(private val instanceCreator: StructT<T>) {
     constructor(targetCls: Class<T>) : this(StructT(targetCls))
     constructor(targetCls: KClass<T>) : this(StructT(targetCls.java))
 
-    // Note: So the creation of deserializer can be expensive
+    // Note: So the creation of deserializer can be expensive.
+    // Don't try to create it all the time.
     private val cls = instanceCreator.newInstance().javaClass
-
-    init {
-        buildDeserializerInternal()
-    }
+    private val deserializers = buildDeserializerInternal()
 
     /**
-     * Main deserialization function.
+     * Deserialize from specified protocol
+     * @param reader Passed tagged protocol reader
+     * @return Created object
      */
     fun deserialize(reader: TaggedProtocolReader): T {
-        // TODO: Will be changed when implementing full logic.
         val obj : T = instanceCreator.newInstance()
-        val impl = StructDeserializer(obj.javaClass, charset)
-        return impl.deserialize(obj, reader, false) as T
+        deserializers.forEach {
+            it.deserialize(it.cls.cast(obj), reader)
+        }
+        return obj
     }
 
-    private fun buildDeserializerInternal() {
-        // Step 1: Analyze each field of given T so we know
-        //         how many fields need to be deserialized.
-        //         build deserialization table.
-        // Step 2: Build each deserializer, which should be
-        //         a recursive structure.
+    private fun buildDeserializerInternal() : List<StructDeserializerImpl> {
+        val deserializers = arrayListOf(StructDeserializerImpl(cls, false))
+        var superClass = cls.superclass
+        while (superClass != Object::class.java) {
+            deserializers.add(StructDeserializerImpl(superClass, true))
+            superClass = cls.superclass
+        }
+        return deserializers.reversed() // Start from base class
     }
 }
