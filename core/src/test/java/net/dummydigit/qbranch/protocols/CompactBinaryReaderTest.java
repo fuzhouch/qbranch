@@ -9,12 +9,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.math.BigInteger;
 import javax.xml.bind.DatatypeConverter;
+
+import kotlin.NotImplementedError;
 import net.dummydigit.qbranch.Deserializer;
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException;
 import net.dummydigit.qbranch.ut.PrimitiveStruct;
 
+import net.dummydigit.qbranch.ut.mocks.ContainerTypes;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class CompactBinaryReaderTest {
 
@@ -33,6 +37,7 @@ public class CompactBinaryReaderTest {
         Assert.assertTrue(base64EncodedContent.length() > 0);
         return DatatypeConverter.parseBase64Binary(base64EncodedContent);
     }
+
     @Test
     public void testReaderWorkflow() {
         byte[] data = getEncodedTestPayload("primitive_values.txt");
@@ -63,5 +68,15 @@ public class CompactBinaryReaderTest {
         byte[] data = DatatypeConverter.parseBase64Binary("TestData");
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
         CompactBinaryReader reader = new CompactBinaryReader(inputBuffer, 2);
+    }
+
+    @Test(expected=NotImplementedError.class)
+    public void testContainerType() {
+        byte[] data = getEncodedTestPayload("container_values.txt");
+
+        ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
+        CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
+        Deserializer<ContainerTypes> deserializer = new Deserializer<>(ContainerTypes.class);
+        // ContainerTypes containerTypes = deserializer.deserialize(reader);
     }
 }

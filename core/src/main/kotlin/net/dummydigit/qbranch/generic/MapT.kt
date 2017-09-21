@@ -5,7 +5,11 @@ package net.dummydigit.qbranch.generic
 
 class MapT<K : Any, V: Any>(private val kCls : QTypeArg<K>,
                             private val vCls : QTypeArg<V>) : QTypeArg<MutableMap<K, V>>, KvpContainerTypeArg<K, V> {
+    private val refObj = mutableMapOf<K, V>()
+    private val refType = refObj.javaClass
+
     override fun newInstance(): MutableMap<K, V> = mutableMapOf()
     override fun newKey(): K = kCls.newInstance()
     override fun newValue() : V = vCls.newInstance()
+    override fun getGenericType() = refType
 }

@@ -5,8 +5,6 @@ package net.dummydigit.qbranch.impl
 
 import net.dummydigit.qbranch.BondDataType
 import net.dummydigit.qbranch.annotations.FieldId
-import net.dummydigit.qbranch.exceptions.InvalidStructException
-import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 import net.dummydigit.qbranch.types.*
 import java.lang.reflect.Field
@@ -47,7 +45,6 @@ internal class StructDeserializer(val cls : Class<*>,
     }
 
     private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, StructFieldSetter> {
-
         val fieldDeserializerMap = HashMap<Int, StructFieldSetter>()
         inputCls.declaredFields.forEach {
             fieldsByName[it.name] = it
@@ -61,7 +58,6 @@ internal class StructDeserializer(val cls : Class<*>,
                 val creatorField = fieldsByName[creatorFieldName]
                 if (creatorField != null) {
                     creatorFieldsByName[it.key] = creatorField
-                    it.value.isAccessible = true
                 }
                 val fieldId = fieldIdAnnotation.id
                 val fieldSetter = createFieldSetter(it.value, fieldId)
@@ -73,6 +69,13 @@ internal class StructDeserializer(val cls : Class<*>,
     }
 
     private fun createFieldSetter(field: Field, id : Int) : StructFieldSetter {
+
+        val creator = creatorFieldsByName[field.name]
+        if (creator != null) {
+            // All containers and generic types go here.
+            throw NotImplementedError()
+        }
+
         return when (field.genericType) {
             Boolean::class.java -> StructFieldSetter.Bool(field)
             Byte::class.java -> StructFieldSetter.Int8(field)
@@ -87,13 +90,6 @@ internal class StructDeserializer(val cls : Class<*>,
             String::class.java -> StructFieldSetter.UTF16LEString(field)
             Float::class.java -> StructFieldSetter.Float(field)
             Double::class.java -> StructFieldSetter.Double(field)
-            /*ArrayList::class.java -> {
-                val creatorField = creatorFieldsByName[field.name]
-                        ?: throw InvalidStructException(field.name, "CreatorFieldNotFound")
-                StructFieldSetter.Vector(field, creatorField)
-            }*/
-            // ArrayList, MutableList and MutableSet : I need container length and element type.
-            // MutableMap : I need container length, key/value type.
             else -> {
                 val fieldDeserializer = StructDeserializer(field.type, false)
                 StructFieldSetter.Struct(field, fieldDeserializer)

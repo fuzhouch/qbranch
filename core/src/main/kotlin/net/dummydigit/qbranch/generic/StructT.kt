@@ -12,4 +12,5 @@ class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T) : 
     private val cls = refObj.javaClass
 
     override fun newInstance() = instanceCreator()
+    override fun getGenericType() = cls
 }
