@@ -13,10 +13,8 @@
 
 package net.dummydigit.qbranch.ut
 
-import net.dummydigit.qbranch.QBranchSerializable
+import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.*
-import net.dummydigit.qbranch.types.*
-
 
 
 @QBranchGeneratedCode("gbc", "0.8.0.0")

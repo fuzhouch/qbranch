@@ -1,7 +1,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.types
+package net.dummydigit.qbranch
 
 import java.math.BigInteger
 
@@ -21,7 +21,7 @@ import java.math.BigInteger
  *
  * @param value Given byte value.
  */
-class UnsignedByte(val value : Short = 0) {
+class UnsignedByte(val value : Short = 0) : QBranchSerializable {
     init {
         if (value < 0 || value > 0xFF) {
             throw IllegalArgumentException("NegativeArgToUnsignedByte")
@@ -34,7 +34,7 @@ class UnsignedByte(val value : Short = 0) {
  *
  * @param value Given byte value.
  */
-class UnsignedShort(val value : Int = 0) {
+class UnsignedShort(val value : Int = 0) : QBranchSerializable{
     init {
         if (value < 0 || value > 0xFFFF) {
             throw IllegalArgumentException("NegativeArgToUnsignedShort")
@@ -47,7 +47,7 @@ class UnsignedShort(val value : Int = 0) {
  *
  * @param value Given byte value.
  */
-class UnsignedInt(val value : Long = 0) {
+class UnsignedInt(val value : Long = 0) : QBranchSerializable{
     init {
         if (value < 0 || value > 0xFFFFFFFF) {
             throw IllegalArgumentException("NegativeArgToUnsignedInt")
@@ -60,7 +60,7 @@ class UnsignedInt(val value : Long = 0) {
  *
  * @param value Given byte value.
  */
-class UnsignedLong(val value : BigInteger = BigInteger("0")) {
+class UnsignedLong(val value : BigInteger = BigInteger("0")) : QBranchSerializable{
     companion object {
         val ZERO : BigInteger = BigInteger("0")
         val MAX_UNSIGNED_LONG_VALUE : BigInteger = BigInteger("18446744073709551615")

@@ -3,7 +3,7 @@
 
 @file:JvmName("ReflectionExtensions")
 
-package net.dummydigit.qbranch.types
+package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
 import java.lang.reflect.Field

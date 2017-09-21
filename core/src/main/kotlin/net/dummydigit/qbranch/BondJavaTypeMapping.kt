@@ -3,8 +3,6 @@
 
 package net.dummydigit.qbranch
 
-import net.dummydigit.qbranch.types.*
-
 /**
  * A mapping to pick correct class from BT_* type.
  */

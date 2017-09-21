@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.BitSet;
-import net.dummydigit.qbranch.types.UnsignedInt;
-import net.dummydigit.qbranch.types.UnsignedLong;
-import net.dummydigit.qbranch.types.UnsignedShort;
+import net.dummydigit.qbranch.UnsignedInt;
+import net.dummydigit.qbranch.UnsignedLong;
+import net.dummydigit.qbranch.UnsignedShort;
 
 // By May 2017 Kotlin does not support bit operations yet.
 // We have to implement bit ops related functions in Java.

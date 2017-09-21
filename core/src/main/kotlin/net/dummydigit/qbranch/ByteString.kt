@@ -1,7 +1,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.types
+package net.dummydigit.qbranch
 
 import kotlin.text.Charsets
 import java.nio.charset.Charset
@@ -13,7 +13,7 @@ import java.nio.charset.Charset
  * @param convertToCharset Parse encoding to convert string value to bytes.
  */
 class ByteString(stringValue : String = "",
-                 convertToCharset : Charset = Charsets.UTF_8) {
+                 convertToCharset : Charset = Charsets.UTF_8) : QBranchSerializable {
     constructor(bytes: ByteArray, convertToCharset: Charset = Charsets.UTF_8) : this(String(bytes), convertToCharset)
 
     val value = stringValue

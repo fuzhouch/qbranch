@@ -3,10 +3,9 @@
 
 package net.dummydigit.qbranch.impl
 
-import net.dummydigit.qbranch.BondDataType
+import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
-import net.dummydigit.qbranch.types.*
 import java.lang.reflect.Field
 import java.util.*
 
@@ -73,6 +72,7 @@ internal class StructDeserializer(val cls : Class<*>,
         val creator = creatorFieldsByName[field.name]
         if (creator != null) {
             // All containers and generic types go here.
+            println("${field.name}, ${field.genericType}, ${field.type}")
             throw NotImplementedError()
         }
 

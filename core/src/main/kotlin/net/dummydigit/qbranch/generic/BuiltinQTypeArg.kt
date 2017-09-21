@@ -2,7 +2,7 @@
 // for full license information.
 package net.dummydigit.qbranch.generic
 
-import net.dummydigit.qbranch.types.*
+import net.dummydigit.qbranch.*
 
 /**
  * A collection of built-in types.

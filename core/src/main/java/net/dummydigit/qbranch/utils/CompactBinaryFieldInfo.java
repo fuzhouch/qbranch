@@ -7,7 +7,7 @@ import net.dummydigit.qbranch.BondDataType;
 import java.io.IOException;
 import java.io.InputStream;
 import net.dummydigit.qbranch.exceptions.EndOfStreamException;
-import net.dummydigit.qbranch.types.UnsignedInt;
+import net.dummydigit.qbranch.UnsignedInt;
 
 /**
  * A helper class to extract field type Id from binary stream.

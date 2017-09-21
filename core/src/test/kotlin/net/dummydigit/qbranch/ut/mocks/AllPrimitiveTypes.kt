@@ -3,10 +3,9 @@
 
 package net.dummydigit.qbranch.ut.mocks
 
-import net.dummydigit.qbranch.QBranchSerializable
+import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
-import net.dummydigit.qbranch.types.*
 
 // A mock class to test primitive types
 @QBranchGeneratedCode("gbc", "version.mock")

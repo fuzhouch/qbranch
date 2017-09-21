@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.utils
 
-import net.dummydigit.qbranch.types.extractGenericTypeArguments
+import net.dummydigit.qbranch.extractGenericTypeArguments
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
