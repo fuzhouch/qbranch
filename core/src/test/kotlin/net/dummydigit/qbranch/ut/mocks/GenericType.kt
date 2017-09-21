@@ -16,7 +16,8 @@ class GenericType<T1 : Any, T2 : Any>(tArgT1 : QTypeArg<T1>, tArgT2 : QTypeArg<T
     @Transient private val setIntField_QTypeArg = SetT(BuiltinQTypeArg.Int32T)
 
     companion object {
-        @JvmStatic fun <T1 : Any, T2 : Any> asQTypeArg(tArgT1 : QTypeArg<T1>, tArgT2 : QTypeArg<T2>) : QTypeArg<GenericType<T1, T2>> {
+        @JvmStatic
+        fun <T1 : Any, T2 : Any> asQTypeArg(tArgT1: QTypeArg<T1>, tArgT2: QTypeArg<T2>): StructT<GenericType<T1, T2>> {
             return StructT({ GenericType(tArgT1, tArgT2) })
         }
     }

@@ -18,7 +18,6 @@ import net.dummydigit.qbranch.ut.PrimitiveStruct;
 import net.dummydigit.qbranch.ut.mocks.ContainerTypes;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class CompactBinaryReaderTest {
 
@@ -30,7 +29,7 @@ public class CompactBinaryReaderTest {
             BufferedReader b = new BufferedReader(new FileReader(testIdlEncodedContent));
             base64EncodedContent = b.readLine();
             b.close();
-        } catch (Exception e) {
+        } catch (java.io.IOException e) {
             Assert.assertTrue("FileInResourcesNotFound", false);
         }
         Assert.assertTrue(base64EncodedContent != null);
@@ -67,7 +66,7 @@ public class CompactBinaryReaderTest {
     public void testThrowExceptionOnBadProtocolVersion() throws UnsupportedVersionException {
         byte[] data = DatatypeConverter.parseBase64Binary("TestData");
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
-        CompactBinaryReader reader = new CompactBinaryReader(inputBuffer, 2);
+        new CompactBinaryReader(inputBuffer, 2);
     }
 
     @Test(expected=NotImplementedError.class)
@@ -77,6 +76,6 @@ public class CompactBinaryReaderTest {
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
         CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
         Deserializer<ContainerTypes> deserializer = new Deserializer<>(ContainerTypes.class);
-        // ContainerTypes containerTypes = deserializer.deserialize(reader);
+        deserializer.deserialize(reader);
     }
 }
