@@ -10,20 +10,20 @@ class GenericTypeToken(val name : String, val typeArguments : Array<GenericTypeT
         private val genericTypeNamePattern = Regex("([a-zA-Z][a-zA-Z0-9.]*)<(.*)>")
         private val nonGenericTypeNamePattern = Regex("([a-zA-Z][a-zA-Z0-9.]*)")
 
-        @JvmStatic fun parseGenericTypeName(typeName: String): GenericTypeToken {
+        @JvmStatic fun parseTypeName(typeName: String): GenericTypeToken {
             val matcher = genericTypeNamePattern.matchEntire(typeName)
             return if (matcher != null) {
-                val genericTypeName = matcher.groups[1].toString()
-                val genericTypeArgs = matcher.groups[2].toString()
+                val genericTypeName = matcher.groups[1]!!.value
+                val genericTypeArgs = matcher.groups[2]!!.value
                         .split(",".toRegex())
                         .dropLastWhile { it.isEmpty() }
-                        .map { parseGenericTypeName(it) }
+                        .map { parseTypeName(it) }
                         .toTypedArray()
                 GenericTypeToken(genericTypeName, genericTypeArgs)
             } else {
                 val nonGenericMatcher = nonGenericTypeNamePattern.matchEntire(typeName)
                 if (nonGenericMatcher != null) {
-                    val nonGenericTypeName = nonGenericMatcher.groups[1].toString()
+                    val nonGenericTypeName = nonGenericMatcher.groups[1]!!.value
                     GenericTypeToken(nonGenericTypeName, null)
                 } else {
                     throw IllegalArgumentException(typeName)
