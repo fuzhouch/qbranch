@@ -3,9 +3,7 @@
 
 package net.dummydigit.qbranch.generic
 
-import java.lang.reflect.Type
-
-interface QTypeArg<out T : Any> {
+interface QTypeArg<T : Any> {
     fun newInstance() : T
-    fun getGenericType() : Type
+    fun getGenericType() : Class<T>
 }

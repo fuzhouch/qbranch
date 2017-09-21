@@ -71,7 +71,6 @@ internal class StructDeserializer(val cls : Class<*>,
         val creator = creatorFieldsByName[field.name]
         if (creator != null) {
             // All containers and generic types go here.
-            println("${field.name}, ${field.genericType}, ${field.type}")
             throw NotImplementedError()
         }
 
