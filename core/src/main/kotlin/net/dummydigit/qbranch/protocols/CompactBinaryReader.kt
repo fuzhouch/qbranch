@@ -9,8 +9,6 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import net.dummydigit.qbranch.exceptions.EndOfStreamException
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException
-import net.dummydigit.qbranch.utils.CompactBinaryFieldInfo
-import net.dummydigit.qbranch.utils.ContainerHeaderInfo
 import net.dummydigit.qbranch.utils.VariableLength
 import net.dummydigit.qbranch.utils.ZigZag
 

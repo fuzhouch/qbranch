@@ -1,4 +1,4 @@
-package net.dummydigit.qbranch.impl
+package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 

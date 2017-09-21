@@ -3,13 +3,14 @@
 
 package net.dummydigit.qbranch.utils;
 
+import net.dummydigit.qbranch.UnsignedInt;
+import net.dummydigit.qbranch.UnsignedLong;
+import net.dummydigit.qbranch.UnsignedShort;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.BitSet;
-import net.dummydigit.qbranch.UnsignedInt;
-import net.dummydigit.qbranch.UnsignedLong;
-import net.dummydigit.qbranch.UnsignedShort;
 
 // By May 2017 Kotlin does not support bit operations yet.
 // We have to implement bit ops related functions in Java.
@@ -18,7 +19,6 @@ import net.dummydigit.qbranch.UnsignedShort;
  * Variable int encoder/decoder helper functions.
  */
 public class VariableLength {
-
     static final int MAX_VAR_UINT16_BYTES = 3;
     static final int MAX_VAR_UINT32_BYTES = 5;
     static final int MAX_VAR_UINT64_BYTES = 10;

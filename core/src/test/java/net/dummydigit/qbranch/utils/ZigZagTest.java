@@ -3,10 +3,7 @@
 
 package net.dummydigit.qbranch.utils;
 
-import net.dummydigit.qbranch.UnsignedByte;
-import net.dummydigit.qbranch.UnsignedInt;
-import net.dummydigit.qbranch.UnsignedLong;
-import net.dummydigit.qbranch.UnsignedShort;
+import net.dummydigit.qbranch.*;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

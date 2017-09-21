@@ -1,7 +1,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.impl
+package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.FieldId
@@ -10,7 +10,7 @@ import java.lang.reflect.Field
 import java.util.*
 
 internal class StructDeserializer(val cls : Class<*>,
-                                  private val isBaseClass : Boolean) : DeserializerBase {
+                                  private val isBaseClass : Boolean) : net.dummydigit.qbranch.DeserializerBase {
     private val fieldsByName = HashMap<String, Field>()
     private val creatorFieldsByName = HashMap<String, Field>()
     private val declaredFieldDeserializerMap = buildDeclaredFieldDeserializer(cls)
@@ -43,8 +43,8 @@ internal class StructDeserializer(val cls : Class<*>,
         }
     }
 
-    private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, StructFieldSetter> {
-        val fieldDeserializerMap = HashMap<Int, StructFieldSetter>()
+    private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, net.dummydigit.qbranch.StructFieldSetter> {
+        val fieldDeserializerMap = HashMap<Int, net.dummydigit.qbranch.StructFieldSetter>()
         inputCls.declaredFields.forEach {
             fieldsByName[it.name] = it
             it.isAccessible = true
@@ -67,8 +67,7 @@ internal class StructDeserializer(val cls : Class<*>,
         return fieldDeserializerMap
     }
 
-    private fun createFieldSetter(field: Field, id : Int) : StructFieldSetter {
-
+    private fun createFieldSetter(field: Field, id : Int) : net.dummydigit.qbranch.StructFieldSetter {
         val creator = creatorFieldsByName[field.name]
         if (creator != null) {
             // All containers and generic types go here.
@@ -77,22 +76,22 @@ internal class StructDeserializer(val cls : Class<*>,
         }
 
         return when (field.genericType) {
-            Boolean::class.java -> StructFieldSetter.Bool(field)
-            Byte::class.java -> StructFieldSetter.Int8(field)
-            Short::class.java -> StructFieldSetter.Int16(field)
-            Int::class.java -> StructFieldSetter.Int32(field)
-            Long::class.java -> StructFieldSetter.Int64(field)
-            UnsignedByte::class.java -> StructFieldSetter.UInt8(field)
-            UnsignedShort::class.java -> StructFieldSetter.UInt16(field)
-            UnsignedInt::class.java -> StructFieldSetter.UInt32(field)
-            UnsignedLong::class.java -> StructFieldSetter.UInt64(field)
-            ByteString::class.java -> StructFieldSetter.ByteString(field)
-            String::class.java -> StructFieldSetter.UTF16LEString(field)
-            Float::class.java -> StructFieldSetter.Float(field)
-            Double::class.java -> StructFieldSetter.Double(field)
+            Boolean::class.java -> net.dummydigit.qbranch.StructFieldSetter.Bool(field)
+            Byte::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int8(field)
+            Short::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int16(field)
+            Int::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int32(field)
+            Long::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int64(field)
+            UnsignedByte::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt8(field)
+            UnsignedShort::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt16(field)
+            UnsignedInt::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt32(field)
+            UnsignedLong::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt64(field)
+            ByteString::class.java -> net.dummydigit.qbranch.StructFieldSetter.ByteString(field)
+            String::class.java -> net.dummydigit.qbranch.StructFieldSetter.UTF16LEString(field)
+            Float::class.java -> net.dummydigit.qbranch.StructFieldSetter.Float(field)
+            Double::class.java -> net.dummydigit.qbranch.StructFieldSetter.Double(field)
             else -> {
-                val fieldDeserializer = StructDeserializer(field.type, false)
-                StructFieldSetter.Struct(field, fieldDeserializer)
+                val fieldDeserializer = net.dummydigit.qbranch.StructDeserializer(field.type, false)
+                net.dummydigit.qbranch.StructFieldSetter.Struct(field, fieldDeserializer)
             }
         }
     }

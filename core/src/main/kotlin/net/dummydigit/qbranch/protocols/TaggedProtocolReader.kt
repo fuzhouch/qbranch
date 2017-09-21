@@ -4,8 +4,6 @@
 package net.dummydigit.qbranch.protocols
 
 import net.dummydigit.qbranch.*
-import net.dummydigit.qbranch.utils.ContainerHeaderInfo
-import net.dummydigit.qbranch.utils.FieldInfo
 
 /**
  * Reader interface for tagged protocols.

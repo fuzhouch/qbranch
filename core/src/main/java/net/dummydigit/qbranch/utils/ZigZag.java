@@ -3,11 +3,12 @@
 
 package net.dummydigit.qbranch.utils;
 
-import java.math.BigInteger;
 import net.dummydigit.qbranch.UnsignedByte;
-import net.dummydigit.qbranch.UnsignedShort;
 import net.dummydigit.qbranch.UnsignedInt;
 import net.dummydigit.qbranch.UnsignedLong;
+import net.dummydigit.qbranch.UnsignedShort;
+
+import java.math.BigInteger;
 
 /**
  * Contains util functions for decoding/encoding ZigZag format.

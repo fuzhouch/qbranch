@@ -1,13 +1,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.utils;
+package net.dummydigit.qbranch.protocols;
 
-import net.dummydigit.qbranch.BondDataType;
 import java.io.IOException;
 import java.io.InputStream;
-import net.dummydigit.qbranch.exceptions.EndOfStreamException;
+
+import net.dummydigit.qbranch.BondDataType;
 import net.dummydigit.qbranch.UnsignedInt;
+import net.dummydigit.qbranch.exceptions.EndOfStreamException;
+import net.dummydigit.qbranch.utils.VariableLength;
 
 /**
  * A helper class to extract field type Id from binary stream.

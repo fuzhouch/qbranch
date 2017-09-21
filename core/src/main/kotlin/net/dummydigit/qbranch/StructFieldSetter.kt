@@ -1,9 +1,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.impl
+package net.dummydigit.qbranch
 
-import net.dummydigit.qbranch.BondDataType
 import net.dummydigit.qbranch.exceptions.SchemaMismatchException
 import net.dummydigit.qbranch.generic.ListT
 import net.dummydigit.qbranch.generic.MapT
@@ -17,61 +16,61 @@ internal sealed class StructFieldSetter(structField: Field) {
 
     abstract fun set(obj: Any, reader: TaggedProtocolReader)
 
-    class Bool(field: Field) : StructFieldSetter(field) {
+    class Bool(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readBool())
     }
 
-    class Int8(field: Field) : StructFieldSetter(field) {
+    class Int8(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readInt8())
     }
 
-    class Int16(field: Field) : StructFieldSetter(field) {
+    class Int16(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readInt16())
     }
 
-    class Int32(field: Field) : StructFieldSetter(field) {
+    class Int32(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readInt32())
     }
 
-    class Int64(field: Field) : StructFieldSetter(field) {
+    class Int64(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readInt64())
     }
 
-    class UInt8(field: Field) : StructFieldSetter(field) {
+    class UInt8(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readUInt8())
     }
 
-    class UInt16(field: Field) : StructFieldSetter(field) {
+    class UInt16(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readUInt16())
     }
 
-    class UInt32(field: Field) : StructFieldSetter(field) {
+    class UInt32(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readUInt32())
     }
 
-    class UInt64(field: Field) : StructFieldSetter(field) {
+    class UInt64(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readUInt64())
     }
 
-    class ByteString(field: Field) : StructFieldSetter(field) {
+    class ByteString(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readByteString())
     }
 
-    class UTF16LEString(field: Field) : StructFieldSetter(field) {
+    class UTF16LEString(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readUTF16LEString())
     }
 
-    class Float(field: Field) : StructFieldSetter(field) {
+    class Float(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readFloat())
     }
 
-    class Double(field: Field) : StructFieldSetter(field) {
+    class Double(field: Field) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) = field.set(obj, reader.readDouble())
     }
 
     class Vector(field : Field,
                  private val creatorField : Field,
-                 private val elementDeserializer : DeserializerBase) : StructFieldSetter(field) {
+                 private val elementDeserializer : net.dummydigit.qbranch.DeserializerBase) : net.dummydigit.qbranch.StructFieldSetter(field) {
 
         override fun set(obj: Any, reader: TaggedProtocolReader) {
             val header = reader.readContainerHeader()
@@ -91,7 +90,7 @@ internal sealed class StructFieldSetter(structField: Field) {
 
     class List(field : Field,
                  private val creatorField : Field,
-                 private val elementDeserializer : DeserializerBase) : StructFieldSetter(field) {
+                 private val elementDeserializer : net.dummydigit.qbranch.DeserializerBase) : net.dummydigit.qbranch.StructFieldSetter(field) {
 
         override fun set(obj: Any, reader: TaggedProtocolReader) {
             val header = reader.readContainerHeader()
@@ -111,7 +110,7 @@ internal sealed class StructFieldSetter(structField: Field) {
 
     class Set(field : Field,
                private val creatorField : Field,
-               private val elementDeserializer : DeserializerBase) : StructFieldSetter(field) {
+               private val elementDeserializer : net.dummydigit.qbranch.DeserializerBase) : net.dummydigit.qbranch.StructFieldSetter(field) {
 
         override fun set(obj: Any, reader: TaggedProtocolReader) {
             val header = reader.readContainerHeader()
@@ -131,8 +130,8 @@ internal sealed class StructFieldSetter(structField: Field) {
 
     class Map(field : Field,
               private val creatorField : Field,
-              private val keyDeserializer : DeserializerBase,
-              private val valueDeserializer : DeserializerBase) : StructFieldSetter(field) {
+              private val keyDeserializer : net.dummydigit.qbranch.DeserializerBase,
+              private val valueDeserializer : net.dummydigit.qbranch.DeserializerBase) : net.dummydigit.qbranch.StructFieldSetter(field) {
 
         override fun set(obj: Any, reader: TaggedProtocolReader) {
             val header = reader.readContainerHeader()
@@ -152,7 +151,7 @@ internal sealed class StructFieldSetter(structField: Field) {
         }
     }
 
-    class Struct(field : Field, private val deserializer : DeserializerBase) : StructFieldSetter(field) {
+    class Struct(field : Field, private val deserializer : net.dummydigit.qbranch.DeserializerBase) : net.dummydigit.qbranch.StructFieldSetter(field) {
         override fun set(obj: Any, reader: TaggedProtocolReader) {
             deserializer.deserialize(field.get(obj), reader)
         }
