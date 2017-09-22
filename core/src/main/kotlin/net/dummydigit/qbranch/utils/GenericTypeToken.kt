@@ -1,11 +1,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.generic
+package net.dummydigit.qbranch.utils
 
 import kotlin.text.Regex
 
-class GenericTypeToken(val name : String, val typeArguments : Array<GenericTypeToken>?) {
+class GenericTypeToken(val name : String, val typeArguments : Array<GenericTypeToken>) {
     companion object {
         private val genericTypeNamePattern = Regex("([a-zA-Z][a-zA-Z0-9.]*)<(.*)>")
         private val nonGenericTypeNamePattern = Regex("([a-zA-Z][a-zA-Z0-9.]*)")
@@ -24,7 +24,7 @@ class GenericTypeToken(val name : String, val typeArguments : Array<GenericTypeT
                 val nonGenericMatcher = nonGenericTypeNamePattern.matchEntire(typeName)
                 if (nonGenericMatcher != null) {
                     val nonGenericTypeName = nonGenericMatcher.groups[1]!!.value
-                    GenericTypeToken(nonGenericTypeName, null)
+                    GenericTypeToken(nonGenericTypeName, arrayOf())
                 } else {
                     throw IllegalArgumentException(typeName)
                 }

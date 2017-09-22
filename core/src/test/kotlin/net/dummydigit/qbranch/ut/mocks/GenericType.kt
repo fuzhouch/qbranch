@@ -8,12 +8,12 @@ import net.dummydigit.qbranch.generic.*
 import net.dummydigit.qbranch.QBranchSerializable
 
 @QBranchGeneratedCode("mock", "version.mock")
-class GenericType<T1 : Any, T2 : Any>(@Transient private val tArgT1 : QTypeArg<T1>,
-                                      @Transient private val tArgT2 : QTypeArg<T2>) : QBranchSerializable{
-    @Transient private val fieldT1_QTypeArg = tArgT1
-    @Transient private val fieldT2_QTypeArg = tArgT2
-    @Transient private val vectorT1_QTypeArg = VectorT(tArgT1)
-    @Transient private val mapT1T2_QTypeArg = MapT(tArgT1, tArgT2)
+class GenericType<T1 : Any, T2 : Any>(@Transient private val T1_QTypeArg : QTypeArg<T1>,
+                                      @Transient private val T2_QTypeArg : QTypeArg<T2>) : QBranchSerializable{
+    @Transient private val fieldT1_QTypeArg = T1_QTypeArg
+    @Transient private val fieldT2_QTypeArg = T2_QTypeArg
+    @Transient private val vectorT1_QTypeArg = VectorT(T1_QTypeArg)
+    @Transient private val mapT1T2_QTypeArg = MapT(T1_QTypeArg, T2_QTypeArg)
     @Transient private val setIntField_QTypeArg = SetT(BuiltinQTypeArg.Int32T)
 
     companion object {

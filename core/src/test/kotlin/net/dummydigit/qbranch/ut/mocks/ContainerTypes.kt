@@ -11,7 +11,7 @@ import net.dummydigit.qbranch.generic.VectorT
 
 @QBranchGeneratedCode("mock", "version.mock")
 class ContainerTypes : QBranchSerializable {
-    @FieldId(0) @JvmField var vectorIntField : ArrayList<Int> = arrayListOf()
+    @FieldId(0) @JvmField var vectorIntField : ArrayList<ArrayList<Int>> = arrayListOf()
 
-    private val vectorIntField_QTypeArg = VectorT(BuiltinQTypeArg.Int32T)
+    private val vectorIntField_QTypeArg = VectorT(VectorT(BuiltinQTypeArg.Int32T))
 }

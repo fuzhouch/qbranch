@@ -15,6 +15,7 @@ object BuiltinQTypeArg {
         override fun getGenericType() = cls
     }
 
+    @JvmField val BoolT : QTypeArg<Boolean> = PrimitiveQTypeArg({ false }, Boolean::class.java)
     @JvmField val Int8T : QTypeArg<Byte> = PrimitiveQTypeArg({ 0 }, Byte::class.java)
     @JvmField val Int16T : QTypeArg<Short> = PrimitiveQTypeArg({ 0 }, Short::class.java)
     @JvmField val Int32T : QTypeArg<Int> = PrimitiveQTypeArg({ 0 }, Int::class.java)
