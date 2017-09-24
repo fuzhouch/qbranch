@@ -15,6 +15,7 @@ package net.dummydigit.qbranch.ut
 
 import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.*
+import net.dummydigit.qbranch.generic.StructT
 
 
 @QBranchGeneratedCode("gbc", "0.8.0.0")
@@ -43,6 +44,13 @@ open class PrimitiveStruct : QBranchSerializable
     @FieldId(21) var floatvalue : Float = 0.0f
 
     @FieldId(23) var doublevalue : Double = 0.0
+
+    companion object {
+        @JvmStatic
+        fun asQTypeArg() : StructT<PrimitiveStruct> {
+            return StructT({ PrimitiveStruct() }, baseClassT = null)
+        }
+    }
 }
 
 // End of package net.dummydigit.qbranch.ut

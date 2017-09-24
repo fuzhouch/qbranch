@@ -9,7 +9,7 @@ import net.dummydigit.qbranch.*
  */
 object BuiltinQTypeArg {
 
-    private class PrimitiveQTypeArg<T : Any>(private val instanceCreator : () -> T,
+    internal class PrimitiveQTypeArg<T : Any>(private val instanceCreator : () -> T,
                                                  private val cls : Class<T>) : QTypeArg<T> {
         override fun newInstance() = instanceCreator()
         override fun getGenericType() = cls

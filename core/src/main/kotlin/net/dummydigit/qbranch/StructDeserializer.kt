@@ -4,19 +4,50 @@
 package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.annotations.FieldId
+import net.dummydigit.qbranch.exceptions.UnsupportedBondTypeException
 import net.dummydigit.qbranch.generic.*
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 import net.dummydigit.qbranch.utils.GenericTypeToken
 import java.lang.reflect.Field
 import java.util.*
 
-internal class StructDeserializer(val cls : Class<*>,
+internal class StructDeserializer(private val typeArg : QTypeArg<*>,
                                   private val isBaseClass : Boolean) : DeserializerBase {
+    private val cls = typeArg.getGenericType()
     private val fieldsByName = HashMap<String, Field>()
-    private val creatorFieldsByName = HashMap<String, Field>()
     private val declaredFieldDeserializerMap = buildDeclaredFieldDeserializer(cls)
+    private val inheritanceChainDeserializer = buildInheritanceChainDeserializer()
 
-    override fun deserialize(preCreatedObj: Any, reader: TaggedProtocolReader) {
+    init {
+        ensureClsIsQBranchGeneratedStruct(cls)
+    }
+
+    override fun deserialize(reader: TaggedProtocolReader) : Any {
+        val obj = cls.newInstance()
+        inheritanceChainDeserializer.forEach {
+            it.deserializeDeclaredFields(it.cls.cast(obj), reader)
+        }
+        return obj
+    }
+
+    private fun buildInheritanceChainDeserializer() : List<StructDeserializer> {
+        val deserializers = arrayListOf<StructDeserializer>()
+        var baseClass = cls.superclass!!
+        while (baseClass != Object::class.java) {
+            ensureClsIsQBranchGeneratedStruct(baseClass)
+            deserializers.add(StructDeserializer(baseClass, true))
+            baseClass = cls.superclass
+        }
+        return deserializers.reversed() // Start from base class
+    }
+
+    private fun ensureClsIsQBranchGeneratedStruct(cls : Class<*>) {
+        if (!cls.isQBranchGeneratedStruct()) {
+            throw UnsupportedBondTypeException(cls)
+        }
+    }
+
+    private fun deserializeDeclaredFields(preCreatedObj: Any, reader: TaggedProtocolReader) : Any {
         val stopSign = if (isBaseClass) {
             BondDataType.BT_STOP_BASE
         } else {
@@ -25,9 +56,9 @@ internal class StructDeserializer(val cls : Class<*>,
 
         var fieldInfo = reader.parseNextField()
         while (fieldInfo.typeId != stopSign) {
-            val fieldSetter = declaredFieldDeserializerMap[fieldInfo.fieldId]
-            if (fieldSetter != null) {
-                fieldSetter.set(preCreatedObj, reader)
+            val valueSetter = declaredFieldDeserializerMap[fieldInfo.fieldId]
+            if (valueSetter != null) {
+                valueSetter.set(preCreatedObj, reader)
             } else {
                 // A field appears in encoded binary but unknown
                 // to deserializer. There can be two cases:
@@ -42,10 +73,24 @@ internal class StructDeserializer(val cls : Class<*>,
             }
             fieldInfo = reader.parseNextField()
         }
+
+        return preCreatedObj
     }
 
-    private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, net.dummydigit.qbranch.StructFieldSetter> {
-        val fieldDeserializerMap = HashMap<Int, net.dummydigit.qbranch.StructFieldSetter>()
+    private fun getCreatorFieldName(valueFieldName : String) : String = "${valueFieldName}_QTypeArg"
+
+    private fun ensureValidCreatorField(field: Field) : Field {
+        val fieldIdAnnotation = field.getDeclaredAnnotation(FieldId::class.java)
+        if (fieldIdAnnotation != null) {
+            throw UnsupportedBondTypeException(cls)
+        }
+
+        field.getDeclaredAnnotation(Transient::class.java) ?: throw UnsupportedBondTypeException(cls)
+        return field
+    }
+
+    private fun buildDeclaredFieldDeserializer(inputCls : Class<*>) : Map<Int, ValueSetter> {
+        val fieldDeserializerMap = HashMap<Int, ValueSetter>()
         inputCls.declaredFields.forEach {
             fieldsByName[it.name] = it
             it.isAccessible = true
@@ -54,111 +99,109 @@ internal class StructDeserializer(val cls : Class<*>,
         fieldsByName.forEach {
             val fieldIdAnnotation = it.value.getDeclaredAnnotation(FieldId::class.java)
             if (fieldIdAnnotation != null) {
-                val creatorFieldName = "${it.key}_QTypeArg"
+                val creatorFieldName = getCreatorFieldName(it.key)
                 val creatorField = fieldsByName[creatorFieldName]
-                if (creatorField != null) {
-                    creatorFieldsByName[it.key] = creatorField
+                // Builtin primitive types have special handling, as unboxed
+                // types (byte, int, etc... can't call Class.forName())
+                val deserializer = if (creatorField != null) {
+                    // All types that can be some kinds of generic goes here.
+                    ensureValidCreatorField(creatorField)
+                    buildDeserializerByName(it.value.name, creatorField.genericType.typeName)
+                } else {
+                    // Enum and primitive types goes here.
+                    buildDeserializerForPrimitiveTypes(it.value)
                 }
-                val fieldId = fieldIdAnnotation.id
-                val fieldSetter = createFieldSetter(it.value)
-                fieldDeserializerMap[fieldId] = fieldSetter
-            }
+                val fieldSetter = ValueSetter(it.value, deserializer)
+                fieldDeserializerMap[fieldIdAnnotation.id] = fieldSetter
+            } // Fields without FieldId() tag are for internal. Don't deserialize.
         }
 
         return fieldDeserializerMap
     }
 
-    private fun createFieldSetter(field: Field) : net.dummydigit.qbranch.StructFieldSetter {
-        val creator = creatorFieldsByName[field.name]
-        if (creator != null) {
-            // All containers and generic types go here.
-            println("field: ${field.name} ${field.genericType.typeName}")
-            buildDeserializer(creator.genericType.typeName)
-            throw NotImplementedError()
-        }
-
+    private fun buildDeserializerForPrimitiveTypes(field : Field) : DeserializerBase {
         return when (field.genericType) {
-            Boolean::class.java -> net.dummydigit.qbranch.StructFieldSetter.Bool(field)
-            Byte::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int8(field)
-            Short::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int16(field)
-            Int::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int32(field)
-            Long::class.java -> net.dummydigit.qbranch.StructFieldSetter.Int64(field)
-            UnsignedByte::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt8(field)
-            UnsignedShort::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt16(field)
-            UnsignedInt::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt32(field)
-            UnsignedLong::class.java -> net.dummydigit.qbranch.StructFieldSetter.UInt64(field)
-            ByteString::class.java -> net.dummydigit.qbranch.StructFieldSetter.ByteString(field)
-            String::class.java -> net.dummydigit.qbranch.StructFieldSetter.UTF16LEString(field)
-            Float::class.java -> net.dummydigit.qbranch.StructFieldSetter.Float(field)
-            Double::class.java -> net.dummydigit.qbranch.StructFieldSetter.Double(field)
+            Boolean::class.java -> BuiltinTypeDeserializer.Bool
+            Byte::class.java -> BuiltinTypeDeserializer.Int8
+            Short::class.java -> BuiltinTypeDeserializer.Int16
+            Int::class.java -> BuiltinTypeDeserializer.Int32
+            Long::class.java -> BuiltinTypeDeserializer.Int64
+            UnsignedByte::class.java -> BuiltinTypeDeserializer.UInt8
+            UnsignedShort::class.java -> BuiltinTypeDeserializer.UInt16
+            UnsignedInt::class.java -> BuiltinTypeDeserializer.UInt32
+            UnsignedLong::class.java -> BuiltinTypeDeserializer.UInt64
+            Float::class.java -> BuiltinTypeDeserializer.Float
+            Double::class.java -> BuiltinTypeDeserializer.Double
+            ByteString::class.java -> BuiltinTypeDeserializer.ByteString
+            String::class.java -> BuiltinTypeDeserializer.WString
+            Blob::class.java -> {
+                throw NotImplementedError()
+            }
             else -> {
-                val fieldDeserializer = net.dummydigit.qbranch.StructDeserializer(field.type, false)
-                net.dummydigit.qbranch.StructFieldSetter.Struct(field, fieldDeserializer)
+                throw NotImplementedError()
             }
         }
     }
 
-    private fun buildDeserializer(typeName : String) : DeserializerBase {
+    private fun buildDeserializerByName(fieldName : String, typeName : String) : DeserializerBase {
         val tokens = GenericTypeToken.parseTypeName(typeName)
-        val typeArgDeserializer = buildTypeArgDeserializer(tokens.name)
-        if (typeArgDeserializer != null) {
-            return typeArgDeserializer
-        }
+        // TODO What happen if we hit a 'T'?
+
+        println("tokens.name: " + tokens.name)
         val typeClass = Class.forName(tokens.name)
         return when (typeClass) {
             VectorT::class.java -> {
                 val elementTypeName = tokens.typeArguments[0].name
-                val elementDeserializer = buildDeserializer(elementTypeName)
-                VectorDeserializer(elementDeserializer)
+                val elementDeserializer = buildDeserializerByName(fieldName, elementTypeName)
+                VectorDeserializer(fieldName, elementDeserializer)
             }
+
             SetT::class.java -> {
                 val elementTypeName = tokens.typeArguments[0].name
-                val elementDeserializer = buildDeserializer(elementTypeName)
+                val elementDeserializer = buildDeserializerByName(fieldName, elementTypeName)
                 SetDeserializer(elementDeserializer)
             }
+
             ListT::class.java -> {
                 val elementTypeName = tokens.typeArguments[0].name
-                val elementDeserializer = buildDeserializer(elementTypeName)
+                val elementDeserializer = buildDeserializerByName(fieldName, elementTypeName)
                 ListDeserializer(elementDeserializer)
             }
+
             MapT::class.java -> {
                 val keyTypeName = tokens.typeArguments[0].name
                 val valueTypeName = tokens.typeArguments[1].name
-                val keyDeserializer = buildDeserializer(keyTypeName)
-                val valueDeserializer = buildDeserializer(valueTypeName)
+                val keyDeserializer = buildDeserializerByName(fieldName, keyTypeName)
+                val valueDeserializer = buildDeserializerByName(fieldName, valueTypeName)
                 MapDeserializer(keyDeserializer, valueDeserializer)
             }
+
             StructT::class.java -> {
                 val structTypeName = tokens.typeArguments[0].name
                 StructDeserializer(Class.forName(structTypeName), isBaseClass = false)
             }
-            BuiltinQTypeArg.BoolT::class.java -> BuiltinTypeDeserializer.BoolDeserializer()
-            BuiltinQTypeArg.Int8T::class.java -> BuiltinTypeDeserializer.Int8Deserializer()
-            BuiltinQTypeArg.Int16T::class.java -> BuiltinTypeDeserializer.Int16Deserializer()
-            BuiltinQTypeArg.Int32T::class.java -> BuiltinTypeDeserializer.Int32Deserializer()
-            BuiltinQTypeArg.Int64T::class.java -> BuiltinTypeDeserializer.Int64Deserializer()
-            BuiltinQTypeArg.UInt8T::class.java -> BuiltinTypeDeserializer.UInt8Deserializer()
-            BuiltinQTypeArg.UInt16T::class.java -> BuiltinTypeDeserializer.UInt16Deserializer()
-            BuiltinQTypeArg.UInt32T::class.java -> BuiltinTypeDeserializer.UInt32Deserializer()
-            BuiltinQTypeArg.UInt64T::class.java -> BuiltinTypeDeserializer.UInt64Deserializer()
-            BuiltinQTypeArg.FloatT::class.java -> BuiltinTypeDeserializer.FloatDeserializer()
-            BuiltinQTypeArg.DoubleT::class.java -> BuiltinTypeDeserializer.DoubleDeserializer()
-            BuiltinQTypeArg.ByteStringT::class.java -> BuiltinTypeDeserializer.ByteStringDeserializer()
-            BuiltinQTypeArg.WStringT::class.java -> BuiltinTypeDeserializer.WStringDeserializer()
+
+            BuiltinQTypeArg.BoolT::class.java -> BuiltinTypeDeserializer.Bool
+            BuiltinQTypeArg.Int8T::class.java -> BuiltinTypeDeserializer.Int8
+            BuiltinQTypeArg.Int16T::class.java -> BuiltinTypeDeserializer.Int16
+            BuiltinQTypeArg.Int32T::class.java -> BuiltinTypeDeserializer.Int32
+            BuiltinQTypeArg.Int64T::class.java -> BuiltinTypeDeserializer.Int64
+            BuiltinQTypeArg.UInt8T::class.java -> BuiltinTypeDeserializer.UInt8
+            BuiltinQTypeArg.UInt16T::class.java -> BuiltinTypeDeserializer.UInt16
+            BuiltinQTypeArg.UInt32T::class.java -> BuiltinTypeDeserializer.UInt32
+            BuiltinQTypeArg.UInt64T::class.java -> BuiltinTypeDeserializer.UInt64
+            BuiltinQTypeArg.FloatT::class.java -> BuiltinTypeDeserializer.Float
+            BuiltinQTypeArg.DoubleT::class.java -> BuiltinTypeDeserializer.Double
+            BuiltinQTypeArg.ByteStringT::class.java -> BuiltinTypeDeserializer.ByteString
+            BuiltinQTypeArg.WStringT::class.java -> BuiltinTypeDeserializer.WString
             BuiltinQTypeArg.BlobT::class.java -> {
                 throw NotImplementedError()
             }
+
+            // TODO: Enum: how can I create enum deserializer.
             else -> {
                 throw NotImplementedError() // Supposed it should never reach here.
             }
         }
-    }
-
-    private fun buildTypeArgDeserializer(typeName : String) : DeserializerBase? {
-        val typeArgName = "${typeName}_QTypeArg"
-        if (fieldsByName.containsKey(typeArgName)) {
-
-        } else {}
-        return null
     }
 }

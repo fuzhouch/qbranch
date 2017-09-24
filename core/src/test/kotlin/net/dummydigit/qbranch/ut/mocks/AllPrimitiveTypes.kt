@@ -6,6 +6,8 @@ package net.dummydigit.qbranch.ut.mocks
 import net.dummydigit.qbranch.*
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
+import net.dummydigit.qbranch.generic.StructT
+import net.dummydigit.qbranch.ut.PrimitiveStruct
 
 // A mock class to test primitive types
 @QBranchGeneratedCode("gbc", "version.mock")
@@ -22,4 +24,11 @@ open class AllPrimitiveTypes : QBranchSerializable {
 
     @FieldId(8) var fieldByteString : ByteString = ByteString()
     @FieldId(9) var fieldString : String = ""
+
+    companion object {
+        @JvmStatic
+        fun asQTypeArg() : StructT<AllPrimitiveTypes> {
+            return StructT({ AllPrimitiveTypes() }, baseClassT = null)
+        }
+    }
 }

@@ -43,7 +43,7 @@ public class CompactBinaryReaderTest {
 
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
         CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
-        Deserializer<PrimitiveStruct> deserializer = new Deserializer<>(PrimitiveStruct.class);
+        Deserializer<PrimitiveStruct> deserializer = new Deserializer<>(PrimitiveStruct.asQTypeArg());
         PrimitiveStruct primitiveStruct = deserializer.deserialize(reader);
 
         Assert.assertEquals(0x01, primitiveStruct.getInt8value());
@@ -75,7 +75,7 @@ public class CompactBinaryReaderTest {
 
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
         CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
-        Deserializer<ContainerTypes> deserializer = new Deserializer<>(ContainerTypes.class);
+        Deserializer<ContainerTypes> deserializer = new Deserializer<>(ContainerTypes.asQTypeArg());
         deserializer.deserialize(reader);
     }
 }

@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.generic
 
-class SetT<E : Any>(private val elementT: QTypeArg<E>) : QTypeArg<MutableSet<E>>, ContainerTypeArg<E> {
+class SetT<E : Any>(val elementT: QTypeArg<E>) : QTypeArg<MutableSet<E>>, ContainerTypeArg<E> {
     private val refObj = mutableSetOf<E>()
     private val refType = refObj.javaClass
 

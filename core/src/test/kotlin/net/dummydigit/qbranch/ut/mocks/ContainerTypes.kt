@@ -7,11 +7,19 @@ import net.dummydigit.qbranch.QBranchSerializable
 import net.dummydigit.qbranch.annotations.FieldId
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode
 import net.dummydigit.qbranch.generic.BuiltinQTypeArg
+import net.dummydigit.qbranch.generic.StructT
 import net.dummydigit.qbranch.generic.VectorT
 
 @QBranchGeneratedCode("mock", "version.mock")
 class ContainerTypes : QBranchSerializable {
-    @FieldId(0) @JvmField var vectorIntField : ArrayList<ArrayList<Int>> = arrayListOf()
-
     private val vectorIntField_QTypeArg = VectorT(VectorT(BuiltinQTypeArg.Int32T))
+
+    companion object {
+        @JvmStatic
+        fun asQTypeArg() : StructT<ContainerTypes> {
+            return StructT({ ContainerTypes() }, baseClassT = null)
+        }
+    }
+
+    @FieldId(0) @JvmField var vectorIntField : ArrayList<ArrayList<Int>> = vectorIntField_QTypeArg.newInstance()
 }

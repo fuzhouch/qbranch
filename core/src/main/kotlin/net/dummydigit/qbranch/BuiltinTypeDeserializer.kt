@@ -2,22 +2,22 @@ package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 
-internal sealed class BuiltinTypeDeserializer(private val readerFunc : (reader : TaggedProtocolReader) -> Any) : DeserializerBase {
-    override fun deserialize(preCreatedObj: Any, reader: TaggedProtocolReader) {
-        readerFunc(reader)
+internal object BuiltinTypeDeserializer {
+    class PrimitiveTypeDeserializer(private val readerFunc : (reader : TaggedProtocolReader) -> Any) : DeserializerBase {
+        override fun deserialize(reader: TaggedProtocolReader) : Any = readerFunc(reader)
     }
 
-    class BoolDeserializer : BuiltinTypeDeserializer({ reader : TaggedProtocolReader -> reader.readBool() })
-    class Int8Deserializer : BuiltinTypeDeserializer({ reader : TaggedProtocolReader -> reader.readInt8() })
-    class Int16Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt16() })
-    class Int32Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt32() })
-    class Int64Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt64() })
-    class UInt8Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt8() })
-    class UInt16Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt16() })
-    class UInt32Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt32() })
-    class UInt64Deserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt64() })
-    class FloatDeserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readFloat() })
-    class DoubleDeserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readDouble() })
-    class ByteStringDeserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readByteString() })
-    class WStringDeserializer : BuiltinTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUTF16LEString() })
+    val Bool = PrimitiveTypeDeserializer({ reader : TaggedProtocolReader -> reader.readBool() })
+    val Int8 = PrimitiveTypeDeserializer({ reader : TaggedProtocolReader -> reader.readInt8() })
+    val Int16 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt16() })
+    val Int32 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt32() })
+    val Int64 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readInt64() })
+    val UInt8 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt8() })
+    val UInt16 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt16() })
+    val UInt32 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt32() })
+    val UInt64 = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUInt64() })
+    val Float = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readFloat() })
+    val Double = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readDouble() })
+    val ByteString = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readByteString() })
+    val WString = PrimitiveTypeDeserializer( { reader : TaggedProtocolReader -> reader.readUTF16LEString() })
 }

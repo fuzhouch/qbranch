@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.generic
 
-class VectorT<E : Any>(private val elementT: QTypeArg<E>) : QTypeArg<ArrayList<E>>, ContainerTypeArg<E> {
+class VectorT<E : Any>(val elementT: QTypeArg<E>) : QTypeArg<ArrayList<E>>, ContainerTypeArg<E> {
 
     private val refObj = arrayListOf<E>()
     private val refType = refObj.javaClass

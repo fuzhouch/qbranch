@@ -5,7 +5,7 @@ package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.protocols.TaggedProtocolReader
 
-class SetDeserializer(private val elementDeserializer : DeserializerBase) : DeserializerBase {
+internal class SetDeserializer(private val elementDeserializer : DeserializerBase) : DeserializerBase {
     override fun deserialize(preCreatedObj: Any, reader: TaggedProtocolReader) {
     }
 }

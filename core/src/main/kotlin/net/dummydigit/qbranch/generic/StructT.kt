@@ -5,12 +5,13 @@ package net.dummydigit.qbranch.generic
 
 import net.dummydigit.qbranch.QBranchSerializable
 
-class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T) : QTypeArg<T> {
-    constructor(targetCls : Class<T>) : this({ targetCls.newInstance() })
+class StructT<T : QBranchSerializable>(private val instanceCreator : () -> T,
+                                       private val baseClassT : StructT<in T>?) : QTypeArg<T> {
 
     private val refObj = instanceCreator()
     private val cls = refObj.javaClass
 
     override fun newInstance() = instanceCreator()
     override fun getGenericType() = cls
+    fun getBaseClassT() = baseClassT
 }

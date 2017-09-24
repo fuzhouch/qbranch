@@ -4,4 +4,4 @@
 
 package net.dummydigit.qbranch.exceptions
 
-class UnsupportedBondTypeException(cls : Class<*>, id : Int) : RuntimeException("type=${cls.name},id=$id")
+class UnsupportedBondTypeException(cls : Class<*>) : RuntimeException("type=${cls.name}")
