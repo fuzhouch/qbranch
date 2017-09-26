@@ -24,6 +24,7 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         inheritanceChainDeserializer.forEach {
             it.deserializeDeclaredFields(it.cls.cast(obj), reader)
         }
+        deserializeDeclaredFields(obj, reader)
         return obj
     }
 
@@ -70,6 +71,7 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         val fieldDeserializerMap = HashMap<Int, ValueSetter>()
 
         cls.declaredFields.forEach {
+            it.isAccessible = true
             val fieldIdAnnotation = it.getDeclaredAnnotation(FieldId::class.java)
             if (fieldIdAnnotation != null) {
                 val fieldTypeArg = typeArg.getFieldTypeArg(it.name)
@@ -101,7 +103,10 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
             UnsignedLong::class.java -> BuiltinTypeDeserializer.UInt64
             Float::class.java -> BuiltinTypeDeserializer.Float
             Double::class.java -> BuiltinTypeDeserializer.Double
+            String::class.java -> BuiltinTypeDeserializer.WString
+            ByteString::class.java -> BuiltinTypeDeserializer.ByteString
             else -> {
+                println(field.name)
                 throw NotImplementedError()
             }
         }
