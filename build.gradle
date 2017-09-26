@@ -27,11 +27,11 @@ subprojects {
 
     dependencies {
         compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3'
-        // In most cases, Java reflection is good enough. Leave
-        // kotlin-reflect here just in case sometimes we may need it in
-        // the future.
-        // compile 'org.jetbrains.kotlin:kotlin-reflect:1.1.4'
-        testCompile 'junit:junit:4.12'
+            // In most cases, Java reflection is good enough. Leave
+            // kotlin-reflect here just in case sometimes we may need it in
+            // the future.
+            // compile 'org.jetbrains.kotlin:kotlin-reflect:1.1.4'
+            testCompile 'junit:junit:4.12'
     }
 
     test {
@@ -41,74 +41,76 @@ subprojects {
     jar {
         manifest {
             attributes("Implementation-Title": "qbranch")
-            attributes("Implementation-Version": version)
+                attributes("Implementation-Version": version)
         }
     }
 
     compileTestJava {
-        options.compilerArgs += [ "-Xlint:unchecked" ]
+        options.compilerArgs += ["-Xlint:unchecked"]
     }
 
     // For publishing to Maven central.
-    task javadocJar(type : Jar) {
+    task javadocJar(type: Jar) {
         classifier = 'javadoc'
-        from javadoc
+            from javadoc
     }
 
-    task sourcesJar(type : Jar) {
+    task sourcesJar(type: Jar) {
         classifier = 'sources'
-        from sourceSets.main.allSource
+            from sourceSets.main.allSource
     }
 
     artifacts {
         archives javadocJar, sourcesJar
     }
 
-    signing.sign configurations.archives
+    if (project.hasProperty('release')) {
+        signing.sign configurations.archives
 
-    uploadArchives {
-      repositories.mavenDeployer {
-          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        uploadArchives {
+            repositories.mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-          repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-            authentication(userName: ossrhUsername, password: ossrhPassword)
-          }
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
 
-          snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-            authentication(userName: ossrhUsername, password: ossrhPassword)
-          }
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
 
-          pom.project {
-            name 'qbranch'
-            packaging 'jar'
-            // optionally artifactId can be defined here
-            description 'An alternative implementation of Microsoft Bond for JVM.'
-            url 'https://github.com/fuzhouch/qbranch'
+                pom.project {
+                    name 'qbranch'
+                    packaging 'jar'
+                    // optionally artifactId can be defined here
+                    description 'An alternative implementation of Microsoft Bond for JVM.'
+                    url 'https://github.com/fuzhouch/qbranch'
 
-            scm {
-              connection 'scm:svn:https://github.com/fuzhouch/qbranch.git'
-              developerConnection 'scm:git:https://github.com/fuzhouch/qbranch.git'
-              url 'https://github.com/fuzhouch/qbranch.git'
+                    scm {
+                        connection 'scm:svn:https://github.com/fuzhouch/qbranch.git'
+                        developerConnection 'scm:git:https://github.com/fuzhouch/qbranch.git'
+                        url 'https://github.com/fuzhouch/qbranch.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT License'
+                            url 'https://github.com/fuzhouch/qbranch/blob/master/LICENSE'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'fuzhouch'
+                            name 'Fuzhou Chen'
+                            email 'fuzhouch@gmail.com'
+                        }
+                    }
+                }
             }
-
-            licenses {
-              license {
-                name 'MIT License'
-                url 'https://github.com/fuzhouch/qbranch/blob/master/LICENSE'
-              }
-            }
-
-            developers {
-              developer {
-                id 'fuzhouch'
-                name 'Fuzhou Chen'
-                email 'fuzhouch@gmail.com'
-              }
-            }
-          }
-      }
+        }
     }
-  }
+}
 
 // TODO
 // Add maven-publish steps from below post. We need to try publishing
