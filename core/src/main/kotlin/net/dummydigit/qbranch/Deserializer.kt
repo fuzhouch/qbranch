@@ -18,37 +18,35 @@ class Deserializer<out T : Any>(private val typeArg : QTypeArg<T>) {
      * @return Created object
      */
     fun deserialize(reader: TaggedProtocolReader): T {
-        return typeArg.getGenericType().cast(deserializerImpl.deserialize(reader))
+        val obj = deserializerImpl.deserialize(reader)
+        return typeArg.getGenericType().cast(obj)
     }
 
     private fun createDeserializer(typeArg : QTypeArg<*>) : DeserializerBase {
         return when (typeArg) {
-            is StructT -> StructDeserializer(typeArg.getGenericType(), isBaseClass = false)
+            is StructT<*> -> StructDeserializer(typeArg, isBaseClass = false)
             is VectorT<*> -> VectorDeserializer(createDeserializer(typeArg.elementT))
             is ListT<*> -> ListDeserializer(createDeserializer(typeArg.elementT))
             is SetT<*> -> SetDeserializer(createDeserializer(typeArg.elementT))
             is MapT<*,*> -> MapDeserializer(createDeserializer(typeArg.keyT), createDeserializer(typeArg.valueT))
-            is BuiltinQTypeArg.PrimitiveQTypeArg<*> -> createBuiltinDeserializer(typeArg.getGenericType())
-            else -> throw UnsupportedBondTypeException(typeArg.getGenericType())
+            is BuiltinQTypeArg.PrimitiveT<*> -> createBuiltinDeserializer(typeArg.dataType)
+            else -> throw UnsupportedBondTypeException(typeArg.newInstance().javaClass)
         }
     }
 
-    private fun createBuiltinDeserializer(builtinType : Class<*>) : DeserializerBase {
-        return when (builtinType) {
-            Boolean::class.java -> BuiltinTypeDeserializer.Bool
-            Byte::class.java -> BuiltinTypeDeserializer.Int8
-            Short::class.java -> BuiltinTypeDeserializer.Int16
-            Int::class.java -> BuiltinTypeDeserializer.Int32
-            Long::class.java -> BuiltinTypeDeserializer.Int64
-            UnsignedByte::class.java -> BuiltinTypeDeserializer.UInt8
-            UnsignedShort::class.java -> BuiltinTypeDeserializer.UInt16
-            UnsignedInt::class.java -> BuiltinTypeDeserializer.UInt32
-            UnsignedLong::class.java -> BuiltinTypeDeserializer.UInt64
-            Float::class.java -> BuiltinTypeDeserializer.Float
-            Double::class.java -> BuiltinTypeDeserializer.Double
-            ByteString::class.java -> BuiltinTypeDeserializer.ByteString
-            String::class.java -> BuiltinTypeDeserializer.WString
-            else -> throw UnsupportedBondTypeException(builtinType)
+    private fun createBuiltinDeserializer(dataType : BondDataType) : DeserializerBase {
+        return when (dataType) {
+            BondDataType.BT_BOOL -> { BuiltinTypeDeserializer.Bool }
+            BondDataType.BT_INT8 -> { BuiltinTypeDeserializer.Int8 }
+            BondDataType.BT_INT16 -> { BuiltinTypeDeserializer.Int16 }
+            BondDataType.BT_INT32 -> { BuiltinTypeDeserializer.Int32 }
+            BondDataType.BT_UINT8 -> { BuiltinTypeDeserializer.UInt8 }
+            BondDataType.BT_UINT16 -> { BuiltinTypeDeserializer.UInt16 }
+            BondDataType.BT_UINT32 -> { BuiltinTypeDeserializer.UInt32 }
+            BondDataType.BT_UINT64 -> { BuiltinTypeDeserializer.UInt64 }
+            BondDataType.BT_FLOAT -> { BuiltinTypeDeserializer.Float }
+            BondDataType.BT_DOUBLE -> { BuiltinTypeDeserializer.Double }
+            else -> { throw NotImplementedError() }
         }
     }
 }

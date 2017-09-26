@@ -37,6 +37,6 @@ public class TestGenericAccess {
         Assert.assertEquals("", BuiltinQTypeArg.WStringT.newInstance());
         Assert.assertTrue(abs(0.0f - BuiltinQTypeArg.FloatT.newInstance()) < 0.0001);
         Assert.assertTrue(abs(0.0 - BuiltinQTypeArg.DoubleT.newInstance()) < 0.0001);
-        Assert.assertNotEquals(null, BuiltinQTypeArg.BlobT.newInstance());
+        // Assert.assertNotEquals(null, BuiltinQTypeArg.BlobT.newInstance());
     }
 }

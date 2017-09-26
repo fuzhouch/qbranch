@@ -4,10 +4,8 @@
 package net.dummydigit.qbranch.generic
 
 class SetT<E : Any>(val elementT: QTypeArg<E>) : QTypeArg<MutableSet<E>>, ContainerTypeArg<E> {
-    private val refObj = mutableSetOf<E>()
-    private val refType = refObj.javaClass
-
+    private val refObj = newInstance()
     override fun newInstance(): MutableSet<E> = mutableSetOf()
+    override fun getGenericType() : Class<MutableSet<E>> = refObj.javaClass
     override fun newElement(): E = elementT.newInstance()
-    override fun getGenericType() = refType
 }

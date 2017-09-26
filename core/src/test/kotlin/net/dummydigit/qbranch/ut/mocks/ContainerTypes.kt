@@ -14,10 +14,16 @@ import net.dummydigit.qbranch.generic.VectorT
 class ContainerTypes : QBranchSerializable {
     private val vectorIntField_QTypeArg = VectorT(VectorT(BuiltinQTypeArg.Int32T))
 
+    class ContainerTypes_QTypeArg : StructT<ContainerTypes>(hashMapOf()) {
+        override fun newInstance() = ContainerTypes()
+        private val refObj = newInstance()
+        override fun getGenericType() = refObj.javaClass
+    }
+
     companion object {
         @JvmStatic
-        fun asQTypeArg() : StructT<ContainerTypes> {
-            return StructT({ ContainerTypes() }, baseClassT = null)
+        fun asQTypeArg() : ContainerTypes_QTypeArg {
+            return ContainerTypes_QTypeArg()
         }
     }
 

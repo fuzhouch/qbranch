@@ -19,5 +19,6 @@ internal class VectorDeserializer(private val elementDeserializer : Deserializer
             val newElement = elementDeserializer.deserialize(reader)
             newVector.add(newElement)
         }
+        return newVector
     }
 }
