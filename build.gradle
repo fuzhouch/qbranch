@@ -21,7 +21,7 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'signing'
 
-    group = 'net.dummydigit'
+    group = 'net.dummydigit.qbranch'
     version = rootProject.file('version.txt').text.trim()
 
     repositories {
