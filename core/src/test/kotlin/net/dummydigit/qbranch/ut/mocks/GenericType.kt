@@ -8,10 +8,11 @@ import net.dummydigit.qbranch.generic.*
 
 @QBranchGeneratedCode("mock", "version.mock")
 open class GenericType<T1 : Any, T2 : Any>(private val _qtypeArgs : GenericType_QTypeArg<T1, T2>)
-    : GenericTypeBase<T2, T1>(_qtypeArgs.baseClass) {
+    : GenericTypeBase<T2, T1>(_qtypeArgs.baseClassT) {
 
-    class GenericType_QTypeArg<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>,
-                                                   val baseClass : GenericTypeBase_QTypeArg<T2, T1>)
+    class GenericType_QTypeArg<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>,
+                                                   T2_QTypeArg : QTypeArg<T2>,
+                                                   val baseClassT : GenericTypeBase_QTypeArg<T2, T1>)
         : StructT<GenericType<T1, T2>>(mapOf("T1" to T1_QTypeArg, "T2" to T2_QTypeArg)) {
         val fieldT1 = T1_QTypeArg
         val fieldT2 = T2_QTypeArg
