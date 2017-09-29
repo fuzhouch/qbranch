@@ -69,13 +69,15 @@ public class CompactBinaryReaderTest {
         new CompactBinaryReader(inputBuffer, 2);
     }
 
-    @Test(expected=NotImplementedError.class)
+    @Test
     public void testContainerType() {
         byte[] data = getEncodedTestPayload("container_values.txt");
-
         ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
         CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
         Deserializer<ContainerTypes> deserializer = new Deserializer<>(ContainerTypes.asQTypeArg());
-        deserializer.deserialize(reader);
+        ContainerTypes container = deserializer.deserialize(reader);
+        Assert.assertEquals(1, container.vectorIntField.size());
+        Assert.assertEquals(1, container.vectorIntField.get(0).size());
+        Assert.assertEquals(10, (int)container.vectorIntField.get(0).get(0));
     }
 }

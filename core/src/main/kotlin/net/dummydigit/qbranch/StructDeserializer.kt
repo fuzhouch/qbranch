@@ -39,7 +39,7 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         var baseClass = cls.superclass
         while (baseClass != Object::class.java) {
             ensureClsIsQBranchGeneratedStruct(baseClass)
-            val baseQTypeArg = getBaseClassQTypeArg(baseClass)
+            var baseQTypeArg = typeArg.baseClassT!!
             deserializers.add(StructDeserializer(baseQTypeArg, true))
             baseClass = cls.superclass
         }
@@ -56,6 +56,7 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         var fieldInfo = reader.parseNextField()
         while (fieldInfo.typeId != stopSign) {
             val valueSetter = declaredFieldDeserializerMap[fieldInfo.fieldId]
+            println(fieldInfo.fieldId)
             if (valueSetter != null) {
                 valueSetter.set(preCreatedObj, reader)
             } else {
@@ -67,25 +68,39 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         return preCreatedObj
     }
 
+    private fun getFieldTypeArg(field : Field) : QTypeArg<*>? {
+        val foundCreatorField = typeArg.javaClass.declaredFields.find { it.name == field.name }
+        if (foundCreatorField != null) {
+            foundCreatorField.isAccessible = true
+            return foundCreatorField.get(typeArg) as QTypeArg<*>
+        }
+        return null
+    }
+
     private fun buildDeclaredFieldDeserializer() : Map<Int, ValueSetter> {
         val fieldDeserializerMap = HashMap<Int, ValueSetter>()
 
         cls.declaredFields.forEach {
-            it.isAccessible = true
-            val fieldIdAnnotation = it.getDeclaredAnnotation(FieldId::class.java)
-            if (fieldIdAnnotation != null) {
-                val fieldTypeArg = typeArg.getFieldTypeArg(it.name)
-                val deserializer = if (fieldTypeArg != null) {
-                    // All container, generated types go there.
-                    DeserializerBase.createDeserializerByTypeArg(fieldTypeArg)
-                } else {
-                    // Primitive types, enums go there.
-                    getDeserializerOfPrimitiveType(it)
-                }
-                val valueSetter = ValueSetter(it, deserializer)
-                fieldDeserializerMap.put(fieldIdAnnotation.id, valueSetter)
+            if (it.name == "Companion") {
+                return@forEach
             }
 
+            it.isAccessible = true
+            val fieldIdAnnotation = it.getDeclaredAnnotation(FieldId::class.java)
+            if (fieldIdAnnotation == null) {
+                throw UnsupportedBondTypeException(cls)
+            }
+
+            val fieldTypeArg = getFieldTypeArg(it)
+            val deserializer = if (fieldTypeArg != null) {
+                // All container, generated types go there.
+                DeserializerBase.createDeserializerByTypeArg(fieldTypeArg)
+            } else {
+                // Primitive types, enums go there.
+                getDeserializerOfPrimitiveType(it)
+            }
+            val valueSetter = ValueSetter(it, deserializer)
+            fieldDeserializerMap.put(fieldIdAnnotation.id, valueSetter)
         }
         return fieldDeserializerMap
     }

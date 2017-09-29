@@ -7,13 +7,12 @@ import net.dummydigit.qbranch.annotations.*
 import net.dummydigit.qbranch.generic.*
 
 @QBranchGeneratedCode("mock", "version.mock")
-open class GenericType<T1 : Any, T2 : Any>(private val _qtypeArgs : GenericType_QTypeArg<T1, T2>)
-    : GenericTypeBase<T2, T1>(_qtypeArgs.baseClassT) {
+open class GenericType<T1 : Any, T2 : Any>(qTypeArgs: GenericTypeT<T1, T2>) : GenericTypeBase<T2, T1>(qTypeArgs.baseClassT) {
 
-    class GenericType_QTypeArg<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>,
-                                                   T2_QTypeArg : QTypeArg<T2>,
-                                                   val baseClassT : GenericTypeBase_QTypeArg<T2, T1>)
-        : StructT<GenericType<T1, T2>>(mapOf("T1" to T1_QTypeArg, "T2" to T2_QTypeArg)) {
+    class GenericTypeT<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>)
+        : StructT<GenericType<T1, T2>>() {
+        override val baseClassT = GenericTypeBase.GenericTypeBaseT(T2_QTypeArg, T1_QTypeArg)
+
         val fieldT1 = T1_QTypeArg
         val fieldT2 = T2_QTypeArg
         val vectorT1 = VectorT(T1_QTypeArg)
@@ -27,17 +26,16 @@ open class GenericType<T1 : Any, T2 : Any>(private val _qtypeArgs : GenericType_
 
     companion object {
         @JvmStatic
-        fun <T1 : Any, T2 : Any> asQTypeArg(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>) : GenericType_QTypeArg<T1, T2> {
-            val baseClassTypeArg = GenericTypeBase.GenericTypeBase_QTypeArg(T2_QTypeArg, T1_QTypeArg)
-            return GenericType_QTypeArg(T1_QTypeArg, T2_QTypeArg, baseClassTypeArg)
+        fun <T1 : Any, T2 : Any> asQTypeArg(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>) : GenericTypeT<T1, T2> {
+            return GenericTypeT(T1_QTypeArg, T2_QTypeArg)
         }
     }
 
-    @FieldId(0) @JvmField var fieldT1 : T1 = _qtypeArgs.fieldT1.newInstance()
-    @FieldId(1) @JvmField var fieldT2 : T2 = _qtypeArgs.fieldT2.newInstance()
-    @FieldId(2) @JvmField var vectorT1 : ArrayList<T1> = _qtypeArgs.vectorT1.newInstance()
-    @FieldId(3) @JvmField var mapT1T2 : MutableMap<T1, T2> = _qtypeArgs.mapT1T2.newInstance()
-    @FieldId(4) @JvmField var setIntField : MutableSet<Int> = _qtypeArgs.setIntField.newInstance()
+    @FieldId(0) @JvmField var fieldT1 : T1 = qTypeArgs.fieldT1.newInstance()
+    @FieldId(1) @JvmField var fieldT2 : T2 = qTypeArgs.fieldT2.newInstance()
+    @FieldId(2) @JvmField var vectorT1 : ArrayList<T1> = qTypeArgs.vectorT1.newInstance()
+    @FieldId(3) @JvmField var mapT1T2 : MutableMap<T1, T2> = qTypeArgs.mapT1T2.newInstance()
+    @FieldId(4) @JvmField var setIntField : MutableSet<Int> = qTypeArgs.setIntField.newInstance()
 }
 
 // Case of generic class:

@@ -24,5 +24,5 @@ interface TaggedProtocolReader {
     fun readDouble() : Double
     fun readContainerHeader() : ContainerHeaderInfo
     fun parseNextField(): FieldInfo
-    fun skipField(dataType : BondDataType): Unit
+    fun skipField(dataType : BondDataType)
 }

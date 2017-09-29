@@ -45,7 +45,8 @@ open class PrimitiveStruct : QBranchSerializable
 
     @FieldId(23) var doublevalue : Double = 0.0
 
-    class PrimitiveStruct_QTypeArg : StructT<PrimitiveStruct>(hashMapOf()) {
+    class PrimitiveStructT : StructT<PrimitiveStruct>() {
+        override val baseClassT = null
         override fun newInstance() = PrimitiveStruct()
         private val refObj = newInstance()
         override fun getGenericType() = refObj.javaClass
@@ -53,8 +54,8 @@ open class PrimitiveStruct : QBranchSerializable
 
     companion object {
         @JvmStatic
-        fun asQTypeArg() : PrimitiveStruct_QTypeArg {
-            return PrimitiveStruct_QTypeArg()
+        fun asQTypeArg() : PrimitiveStructT {
+            return PrimitiveStructT()
         }
     }
 }
