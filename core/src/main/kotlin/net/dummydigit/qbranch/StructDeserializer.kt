@@ -80,20 +80,21 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
 
             it.isAccessible = true
             val fieldIdAnnotation = it.getDeclaredAnnotation(FieldId::class.java)
-            if (fieldIdAnnotation == null) {
+            if (fieldIdAnnotation != null) {
+
+                val fieldTypeArg = getFieldTypeArg(it)
+                val deserializer = if (fieldTypeArg != null) {
+                    // All container, generated types go there.
+                    DeserializerBase.createDeserializerByTypeArg(fieldTypeArg)
+                } else {
+                    // Primitive types, enums go there.
+                    getDeserializerOfPrimitiveType(it)
+                }
+                val valueSetter = ValueSetter(it, deserializer)
+                fieldDeserializerMap.put(fieldIdAnnotation.id, valueSetter)
+            } else {
                 throw UnsupportedBondTypeException(cls)
             }
-
-            val fieldTypeArg = getFieldTypeArg(it)
-            val deserializer = if (fieldTypeArg != null) {
-                // All container, generated types go there.
-                DeserializerBase.createDeserializerByTypeArg(fieldTypeArg)
-            } else {
-                // Primitive types, enums go there.
-                getDeserializerOfPrimitiveType(it)
-            }
-            val valueSetter = ValueSetter(it, deserializer)
-            fieldDeserializerMap.put(fieldIdAnnotation.id, valueSetter)
         }
         return fieldDeserializerMap
     }
