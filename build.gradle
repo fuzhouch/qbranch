@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.50'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
     }
 }
@@ -30,11 +30,7 @@ subprojects {
     apply plugin: 'signing'
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3'
-        // In most cases, Java reflection is good enough. Leave
-        // kotlin-reflect here just in case sometimes we may need it in
-        // the future.
-        // compile 'org.jetbrains.kotlin:kotlin-reflect:1.1.4'
+        compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.51'
         testCompile 'junit:junit:4.12'
     }
 

@@ -28,19 +28,12 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         return obj
     }
 
-    private fun getBaseClassQTypeArg(baseClass : Class<*>) : StructT<*> {
-        val refObjAsBase = baseClass.cast(refObj)
-        val baseQTypeArgField = baseClass.declaredFields.find { it.name == "_qTypeArg" }
-        return baseQTypeArgField!!.get(refObjAsBase) as StructT<*>
-    }
-
     private fun buildInheritanceChainDeserializer() : List<StructDeserializer> {
         val deserializers = arrayListOf<StructDeserializer>()
         var baseClass = cls.superclass
         while (baseClass != Object::class.java) {
             ensureClsIsQBranchGeneratedStruct(baseClass)
-            var baseQTypeArg = typeArg.baseClassT!!
-            deserializers.add(StructDeserializer(baseQTypeArg, true))
+            deserializers.add(StructDeserializer(typeArg.baseClassT!!, true))
             baseClass = cls.superclass
         }
         return deserializers.reversed() // Start from base class
