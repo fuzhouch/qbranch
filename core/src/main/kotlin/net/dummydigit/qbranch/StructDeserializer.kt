@@ -73,7 +73,8 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         val fieldDeserializerMap = HashMap<Int, ValueSetter>()
 
         cls.declaredFields.forEach {
-            if (it.name == "Companion") {
+            if (it.name == "QTypeDef") {
+                // Companion object for defining asQTypeArg
                 return@forEach
             }
 

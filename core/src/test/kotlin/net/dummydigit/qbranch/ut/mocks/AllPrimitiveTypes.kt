@@ -25,17 +25,17 @@ open class AllPrimitiveTypes : QBranchSerializable {
     @FieldId(8) var fieldByteString : ByteString = ByteString()
     @FieldId(9) var fieldString : String = ""
 
-    class AllPrimitiveTypes_QTypeArg : StructT<AllPrimitiveTypes>() {
-        override val baseClassT = null
-        override fun newInstance() = AllPrimitiveTypes()
-        private val refObj = newInstance()
-        override fun getGenericType() = refObj.javaClass
-    }
+    companion object QTypeDef {
+        class AllPrimitiveTypesT : StructT<AllPrimitiveTypes>() {
+            override val baseClassT = null
+            override fun newInstance() = AllPrimitiveTypes()
+            private val refObj = newInstance()
+            override fun getGenericType() = refObj.javaClass
+        }
 
-    companion object {
         @JvmStatic
-        fun asQTypeArg() : AllPrimitiveTypes_QTypeArg {
-            return AllPrimitiveTypes_QTypeArg()
+        fun asQTypeArg() : AllPrimitiveTypesT {
+            return AllPrimitiveTypesT()
         }
     }
 }

@@ -9,22 +9,23 @@ import net.dummydigit.qbranch.generic.*
 @QBranchGeneratedCode("mock", "version.mock")
 open class GenericType<T1 : Any, T2 : Any>(qTypeArgs: GenericTypeT<T1, T2>) : GenericTypeBase<T2, T1>(qTypeArgs.baseClassT) {
 
-    class GenericTypeT<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>)
-        : StructT<GenericType<T1, T2>>() {
-        override val baseClassT = GenericTypeBase.GenericTypeBaseT(T2_QTypeArg, T1_QTypeArg)
+    companion object QTypeDef {
 
-        val fieldT1 = T1_QTypeArg
-        val fieldT2 = T2_QTypeArg
-        val vectorT1 = VectorT(T1_QTypeArg)
-        val mapT1T2 = MapT(T1_QTypeArg, T2_QTypeArg)
-        val setIntField = SetT(BuiltinQTypeArg.Int32T)
+        class GenericTypeT<T1 : Any, T2 : Any>(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>)
+            : StructT<GenericType<T1, T2>>() {
+            override val baseClassT = GenericTypeBase.QTypeDef.GenericTypeBaseT(T2_QTypeArg, T1_QTypeArg)
 
-        override fun newInstance() = GenericType(this)
-        private val refObj = newInstance()
-        override fun getGenericType() = refObj.javaClass
-    }
+            val fieldT1 = T1_QTypeArg
+            val fieldT2 = T2_QTypeArg
+            val vectorT1 = VectorT(T1_QTypeArg)
+            val mapT1T2 = MapT(T1_QTypeArg, T2_QTypeArg)
+            val setIntField = SetT(BuiltinQTypeArg.Int32T)
 
-    companion object {
+            override fun newInstance() = GenericType(this)
+            private val refObj = newInstance()
+            override fun getGenericType() = refObj.javaClass
+        }
+
         @JvmStatic
         fun <T1 : Any, T2 : Any> asQTypeArg(T1_QTypeArg : QTypeArg<T1>, T2_QTypeArg : QTypeArg<T2>) : GenericTypeT<T1, T2> {
             return GenericTypeT(T1_QTypeArg, T2_QTypeArg)

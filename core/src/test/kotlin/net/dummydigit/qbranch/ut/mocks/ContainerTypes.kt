@@ -13,18 +13,18 @@ import net.dummydigit.qbranch.generic.VectorT
 @QBranchGeneratedCode("mock", "version.mock")
 class ContainerTypes(typeArg : ContainerTypesT) : QBranchSerializable {
 
-    class ContainerTypesT : StructT<ContainerTypes>() {
-        // All fields definition must be put before newInstance()
-        // or it will cause NullPointerException when calling asQTypeArg.
-        override val baseClassT = null
-        val vectorIntField = VectorT(VectorT(BuiltinQTypeArg.Int32T))
+    companion object QTypeDef {
+        class ContainerTypesT : StructT<ContainerTypes>() {
+            // All fields definition must be put before newInstance()
+            // or it will cause NullPointerException when calling asQTypeArg.
+            override val baseClassT = null
+            val vectorIntField = VectorT(VectorT(BuiltinQTypeArg.Int32T))
 
-        override fun newInstance() = ContainerTypes(this)
-        private val refObj = newInstance()
-        override fun getGenericType() = refObj.javaClass
-    }
+            override fun newInstance() = ContainerTypes(this)
+            private val refObj = newInstance()
+            override fun getGenericType() = refObj.javaClass
+        }
 
-    companion object {
         @JvmStatic
         fun asQTypeArg() : ContainerTypesT {
             return ContainerTypesT()
