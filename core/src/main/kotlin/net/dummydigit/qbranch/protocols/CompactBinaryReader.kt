@@ -73,6 +73,10 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
         return CompactBinaryFieldInfo.decodeContainerHeaderV1(input)
     }
 
+    override fun readKvpContainerHeader() : KvpContainerHeaderInfo {
+        return CompactBinaryFieldInfo.decodeKvpContainerHeaderV1(input)
+    }
+
     override fun skipField(dataType : BondDataType) {
         when (dataType) {
             BondDataType.BT_BOOL -> input.read()
@@ -90,9 +94,9 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
             BondDataType.BT_WSTRING -> readUTF16LEString()
             // TODO Implement container type in next version.
             // BondDataType.BT_STRUCT ->
-            // BondDataType.BT_LIST ->
-            // BondDataType.BT_SET ->
-            // BondDataType.BT_MAP ->
+            BondDataType.BT_LIST -> skipContainer()
+            BondDataType.BT_SET -> skipContainer()
+            BondDataType.BT_MAP -> skipMap()
             BondDataType.BT_STOP -> throw IllegalStateException("skip=BT_STOP")
             BondDataType.BT_STOP_BASE -> throw IllegalStateException("skip=BT_STOP_BASE")
             BondDataType.BT_UNAVAILABLE -> throw IllegalStateException("skip=BT_UNAVAILABLE")
@@ -100,6 +104,21 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
         }
         // TODO
         throw NotImplementedError("skipField")
+    }
+
+    private fun skipMap() {
+        val header = readKvpContainerHeader()
+        for (i in 0 until header.kvpCount) {
+            skipField(header.keyType)
+            skipField(header.valueType)
+        }
+    }
+
+    private fun skipContainer() {
+        val header = readContainerHeader()
+        for(i in 0 until header.elementCount) {
+            skipField(header.elementType)
+        }
     }
 
     private fun readRawStringBytes(charLen : Int) : ByteArray? {

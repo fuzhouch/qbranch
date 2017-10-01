@@ -9,7 +9,7 @@ internal class VectorDeserializer(private val elementDeserializer : Deserializer
     override fun deserialize(reader: TaggedProtocolReader) : Any {
         val header = reader.readContainerHeader()
         val newVector = arrayListOf<Any>()
-        for (i in 0 until header.length) {
+        for (i in 0 until header.elementCount) {
             val newElement = elementDeserializer.deserialize(reader)
             newVector.add(newElement)
         }

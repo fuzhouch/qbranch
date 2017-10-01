@@ -23,6 +23,7 @@ interface TaggedProtocolReader {
     fun readFloat() : Float
     fun readDouble() : Double
     fun readContainerHeader() : ContainerHeaderInfo
+    fun readKvpContainerHeader() : KvpContainerHeaderInfo
     fun parseNextField(): FieldInfo
     fun skipField(dataType : BondDataType)
 }

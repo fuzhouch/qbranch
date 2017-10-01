@@ -49,7 +49,6 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
         var fieldInfo = reader.parseNextField()
         while (fieldInfo.typeId != stopSign) {
             val valueSetter = declaredFieldDeserializerMap[fieldInfo.fieldId]
-            println(fieldInfo.fieldId)
             if (valueSetter != null) {
                 valueSetter.set(preCreatedObj, reader)
             } else {
@@ -115,7 +114,6 @@ internal class StructDeserializer(private val typeArg : StructT<*>,
             String::class.java -> BuiltinTypeDeserializer.WString
             ByteString::class.java -> BuiltinTypeDeserializer.ByteString
             else -> {
-                println(field.name)
                 throw NotImplementedError()
             }
         }

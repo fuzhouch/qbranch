@@ -6,21 +6,21 @@ package net.dummydigit.qbranch.protocols;
 import net.dummydigit.qbranch.BondDataType;
 
 public class ContainerHeaderInfo {
-    private BondDataType containerType;
+    private BondDataType elementType;
     private long length;
     private int version;
 
-    public ContainerHeaderInfo(BondDataType containerType, long containerLength, int version) {
-        this.containerType = containerType;
+    public ContainerHeaderInfo(BondDataType elementType, long containerLength, int version) {
+        this.elementType = elementType;
         this.length = containerLength;
         this.version = version;
     }
 
-    public BondDataType getContainerType() {
-        return containerType;
+    public BondDataType getElementType() {
+        return elementType;
     }
 
-    public long getLength() {
+    public long getElementCount() {
         return length;
     }
 

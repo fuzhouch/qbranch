@@ -51,8 +51,17 @@ public class CompactBinaryFieldInfo extends FieldInfo {
 
     public static ContainerHeaderInfo decodeContainerHeaderV1(InputStream stream) throws IOException {
         byte oneByte = (byte)stream.read();
-        BondDataType containerType = BondDataType.values()[oneByte & 0x1F];
+        BondDataType elementType = BondDataType.values()[oneByte & 0x1F];
         UnsignedInt containerLength = VariableLength.decodeVarUInt32(stream);
-        return new ContainerHeaderInfo(containerType, containerLength.getValue(), 1);
+        return new ContainerHeaderInfo(elementType, containerLength.getValue(), 1);
+    }
+
+    public static KvpContainerHeaderInfo decodeKvpContainerHeaderV1(InputStream stream) throws IOException {
+        byte firstByte = (byte)stream.read();
+        byte secondByte = (byte)stream.read();
+        BondDataType keyType = BondDataType.values()[firstByte & 0x1F];
+        BondDataType valueType = BondDataType.values()[secondByte & 0x1F];
+        UnsignedInt kvpCount = VariableLength.decodeVarUInt32(stream);
+        return new KvpContainerHeaderInfo(keyType, valueType, kvpCount.getValue(), 1);
     }
 }
