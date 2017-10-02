@@ -3,19 +3,16 @@
 
 package net.dummydigit.qbranch.protocols;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigInteger;
 import javax.xml.bind.DatatypeConverter;
 
-import kotlin.NotImplementedError;
 import net.dummydigit.qbranch.Deserializer;
 import net.dummydigit.qbranch.exceptions.UnsupportedVersionException;
 import net.dummydigit.qbranch.ut.PrimitiveStruct;
-
 import net.dummydigit.qbranch.ut.mocks.ContainerTypes;
+import net.dummydigit.qbranch.ut.mocks.SkipFields;
+import net.dummydigit.qbranch.utils.CompactBinaryReaderWithMarker;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -79,5 +76,18 @@ public class CompactBinaryReaderTest {
         Assert.assertEquals(1, container.vectorIntField.size());
         Assert.assertEquals(1, container.vectorIntField.get(0).size());
         Assert.assertEquals(10, (int)container.vectorIntField.get(0).get(0));
+    }
+
+    @Test
+    public void testSkipFields() {
+        byte[] data = getEncodedTestPayload("skipfields_values.txt");
+        ByteArrayInputStream inputBuffer = new ByteArrayInputStream(data);
+        CompactBinaryReader reader = new CompactBinaryReader(inputBuffer);
+        CompactBinaryReaderWithMarker markerReader = new CompactBinaryReaderWithMarker(reader);
+        Deserializer<SkipFields> deserializer = new Deserializer<>(SkipFields.asQTypeArg());
+        SkipFields obj = deserializer.deserialize(markerReader);
+        Assert.assertEquals(100, obj.getInt32Value());
+        Assert.assertEquals(1, markerReader.getSkippedStringCount());
+        Assert.assertEquals(1, markerReader.getSkippedStructCount());
     }
 }

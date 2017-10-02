@@ -93,17 +93,13 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
             BondDataType.BT_INT64 -> readInt64()
             BondDataType.BT_WSTRING -> readUTF16LEString()
             // TODO Implement container type in next version.
-            // BondDataType.BT_STRUCT ->
+            BondDataType.BT_STRUCT -> skipStruct()
+            BondDataType.BT_STOP_BASE -> {}
             BondDataType.BT_LIST -> skipContainer()
             BondDataType.BT_SET -> skipContainer()
             BondDataType.BT_MAP -> skipMap()
-            BondDataType.BT_STOP -> throw IllegalStateException("skip=BT_STOP")
-            BondDataType.BT_STOP_BASE -> throw IllegalStateException("skip=BT_STOP_BASE")
-            BondDataType.BT_UNAVAILABLE -> throw IllegalStateException("skip=BT_UNAVAILABLE")
-            else -> throw NotImplementedError("$dataType")
+            else -> throw IllegalStateException("skip=$dataType")
         }
-        // TODO
-        throw NotImplementedError("skipField")
     }
 
     private fun skipMap() {
@@ -118,6 +114,14 @@ class CompactBinaryReader(inputStream : InputStream, version : Int, charset: Cha
         val header = readContainerHeader()
         for(i in 0 until header.elementCount) {
             skipField(header.elementType)
+        }
+    }
+
+    private fun skipStruct() {
+        var fieldInfo = parseNextField()
+        while (fieldInfo.typeId != BondDataType.BT_STOP) {
+            skipField(fieldInfo.typeId)
+            fieldInfo = parseNextField()
         }
     }
 
