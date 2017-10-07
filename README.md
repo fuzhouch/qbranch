@@ -1,4 +1,4 @@
-# Qbranch: Alternative implementation of Microsoft Bond.
+# Qbranch: Alternative implementation of Microsoft Bond
 
 QBranch is a hobby project, which tries to provide an alternative
 implementation of [Microsoft Bond](https://github.com/Microsoft/Bond),
@@ -6,47 +6,46 @@ which supports parsing Bond IDL definition and compatible binary
 encode/decode protocol. While Bond tries to support multiple programming
 languages, QBranch focuses only on Java eco-system.
 
-# Regarding project name...
+# Regarding project name
 
-Find an 007 fan from your friends and he/she will surely tell you why. :)
+Time to tell who is a true James Bond fan. :)
 
 # Difference between QBranch and Microsoft Bond
 
 People may have noticed Bond has an on-going effort to support Java (see
 ``jvm`` branch of https://github.com/Microsoft/Bond), so a good question
-is why does developers want QBranch.
+is: since official Microsoft Bond is working on JVM support, why do
+we bother QBranch? A short answer is: you may not want QBranch at all.
+A long version: you may choose QBranch or Bond/Java based on your project
+needs.
 
-A short question is simple: you may not want QBranch at all. Or a longer
-version: you may choose QBranch or Bond/Java based on your project
-needs. Unlike official Bond/Java binding, QBranch is more a unofficial,
-fun project for myself. The origin of two projects result in multiple
-differences:
+Unlike official Bond/Java binding, QBranch is more a unofficial,
+fun project for myself. Unlike the official Bond implementation, I would
+like to take the chance to explore more possibilities.
 
-1. **Different programming languages.** QBranch is written in Kotlin,
-   because I want to find a project to learn a new programming language.
-   Bond/Java is implemented in Java based on their own consideration of
-   maximum compatibility.
+The origin of two projects result in multiple differences:
 
-2. **Different feature set**. Due to constrains of my spare time,
+1. **A (slightly) better generic support.** Bond supports defining
+   structure with generic (type arguments). However, we may get different
+   support level in different target programming languages. The official
+   Bond introduces BondSerializable in both C# and Java, which limits
+   type arguments to generic Bond structure. Meanwhile, QBranch want to
+   see if we can remove the constrains and get almost the same support
+   level just like C++.
+
+2. **Limited feature set**. Due to constrains of my spare time,
    QBranch does not try to implement every feature from Bond. Instead,
    I pick some features useful based on my experience of using Bond. For
    example, QBranch implements only CompactBinary protocol for now.
    I may add more features based on feedbacks or my work experiences,
    but there's not guarantee.
 
-3. **Different integration approach.** Bond/Java must follow existing
-   design of Bond, e.g. it uses gbc as code generation tool. QBranch
-   focuses on only Java world, so I can use Java-based tools like ANTLR
-   to implement a Bond compiler in Java, which provides better
-   integration when using it with other Java build systems like
-   Maven/Gradle.
+3. **A Java-styled integration approach.** Official Bond uses gbc.exe
+   as code generation compiler, which requires external dependency in
+   build system. QBrnach, on the other hand, tries to provide a compiler
+   written in Java/Kotlin, which can be implemented as a Maven/Gradle
+   plug-in, which results in a better integration.
 
-4. **Different design decisions.** As a result of learning Java/Kotlin
-   reflection system, QBranch tries to implement Bond protocol, which
-   requires minimal generated code but put most decoding/encoding logic
-   in core code. Meanwhile, Bond/Java implements most encoding/decoding
-   logic in generated code, which may cause performance gain over
-   QBranch (to be confirmed, really!) but larger output.
 
 So developers can choose them based on their own consideration. If you
 want a complete feature set of Bond with official support, you may go
@@ -68,24 +67,17 @@ able to compile with QBranch's compiler.
 
 # Build QBranch
 
-By 2017, QBranch depends on a private gbc implementation in 
-[my own Bond fork](https://github.com/fuzhouch/bond) to translate .bond
-file to .kt. So developers must follow the steps below to build QBranch.
+By Oct. 2017, QBranch does not depend on official Bond to build the
+code. Just simply clone the code and build with command below. Bond is
+built and verified on Mac and Windows.
 
 ```
     REM Assume you are working at c:\myproject from a CMD window.
     REM Make sure you have Java 7 or above installed.
- 
+
     cd c:\myproject
-    git clone https://github.com/fuzhouch/bond ktbond
-    pushd ktbond
-    REM Build gbc following guideline in https://github.com/Microsoft/Bond
-    popd
     git clone https://github.com/fuzhouch/qbranch qbranch
 
     pushd qbranch
-    gradlew build ^
-         -PbondCompilerPath=c:\myproject\ktbond\build\compiler\build\gbc\gbc ^
-         -PbondIdlPath=c:\myproject\ktbond\idl\bond
-    REM Now you should be able to see all jars in each project.
-    popd
+    gradlew build
+```
