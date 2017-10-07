@@ -9,7 +9,6 @@ dependencies {
 
 generateGrammarSource {
     arguments += [ "-package", "net.dummydigit.qbranch.compiler.grammar" ]
-
 }
 
 // Required to allow we implement main logic in Kotlin.

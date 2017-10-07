@@ -32,7 +32,7 @@ class BondIdlCompiler(compilerSettings: Settings,
     }
 
     private fun getTranslatorByName(settings: Settings) : Translator {
-        val targetName = settings.targetSourceGen
+        val targetName = settings.targetCodeGen
         return when (targetName.toLowerCase()) {
             "kotlin" -> KotlinTranslator(settings)
             else -> throw UnsupportedCodeGeneratorException(targetName)

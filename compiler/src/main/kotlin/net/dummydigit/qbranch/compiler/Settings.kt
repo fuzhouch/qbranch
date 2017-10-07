@@ -8,9 +8,22 @@ package net.dummydigit.qbranch.compiler
  */
 data class Settings(val includePaths : List<String> = listOf(),
                     val setOutputPathByNamespace : Boolean = false,
-                    val outputPathRoot : String = "",
+                    val outputRootPath: String = "",
                     val translateImportedSources : Boolean = false,
-                    val targetSourceGen : String = "kotlin",
+                    val targetCodeGen: String = "kotlin",
                     val compilerName : String = "",
                     val compilerVersion : String = "",
-                    val moreSettings : Map<String, String> = mapOf())
+                    val moreSettings : Map<String, String> = mapOf()) {
+
+    companion object {
+        @JvmStatic
+        fun createSimpleSettings(includePaths : Array<String>,
+                           outputRootPath: String,
+                           targetCodeGen: String) : Settings {
+            return Settings(includePaths = includePaths.toList(),
+                    outputRootPath = outputRootPath,
+                    targetCodeGen = targetCodeGen)
+        }
+    }
+
+}

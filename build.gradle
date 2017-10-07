@@ -16,11 +16,12 @@ buildscript {
 
 apply plugin: 'io.codearte.nexus-staging'
 
-subprojects {
-
+allprojects {
     group = 'net.dummydigit.qbranch'
     version = rootProject.file('version.txt').text.trim()
+}
 
+subprojects {
     repositories {
         mavenCentral()
     }

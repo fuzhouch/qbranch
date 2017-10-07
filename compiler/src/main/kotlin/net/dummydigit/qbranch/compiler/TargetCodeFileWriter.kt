@@ -23,9 +23,9 @@ class TargetCodeFileWriter(private val settings: Settings) : TargetCodeWriter {
         val outputPath = Paths.get(sourceName)
         return when {
             outputPath.isAbsolute -> outputPath
-            settings.outputPathRoot.isEmpty() -> outputPath.toRealPath()
+            settings.outputRootPath.isEmpty() -> outputPath.toRealPath()
             else -> ParsingUtil.buildOutputFileName(outputPath.toString(),
-                    settings.outputPathRoot)
+                    settings.outputRootPath)
         }
     }
 }
