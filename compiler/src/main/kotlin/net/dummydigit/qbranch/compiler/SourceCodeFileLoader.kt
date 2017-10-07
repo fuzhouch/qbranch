@@ -7,7 +7,7 @@ import java.nio.file.Paths
 import java.io.*
 import java.nio.file.Path
 
-class FileSourceCodeLoader(settings: Settings) : SourceCodeLoader {
+class SourceCodeFileLoader(settings: Settings) : SourceCodeLoader {
     private val includePaths = settings.includePaths.map {
         Paths.get(it).toAbsolutePath()
     }

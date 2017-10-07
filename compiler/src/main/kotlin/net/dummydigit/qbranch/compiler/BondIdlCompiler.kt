@@ -14,20 +14,20 @@ import net.dummydigit.qbranch.compiler.parser.*
  */
 class BondIdlCompiler(compilerSettings: Settings,
                       private val sourceCodeLoader : SourceCodeLoader,
-                      private val targetCodeSaver : TargetCodeSaver) {
+                      private val targetCodeWriter: TargetCodeWriter) {
     private val settings = compilerSettings
     private val translator = getTranslatorByName(settings)
 
     constructor(compilerSettings: Settings)
             : this(compilerSettings,
-            FileSourceCodeLoader(compilerSettings),
-            FileTargetCodeSaver(compilerSettings))
+            SourceCodeFileLoader(compilerSettings),
+            TargetCodeFileWriter(compilerSettings))
 
     fun generateTargetCode(inputSource : String) {
         val parser = SourceTreeParser(sourceCodeLoader)
         val sourceTreeList = parser.parse(inputSource)
         val construct = IntermediateConstruct(sourceTreeList)
-        val writer = OneFilePerInputSourceWriter(translator, targetCodeSaver)
+        val writer = OneFilePerInputSourceWriter(translator, targetCodeWriter)
         writer.generateTargetSource(construct)
     }
 

@@ -5,7 +5,7 @@ package net.dummydigit.qbranch.compiler
 
 import java.io.OutputStream
 
-interface TargetCodeSaver {
+interface TargetCodeWriter {
     fun openStream(sourceName : String) : OutputStream
     fun onSaveDone()
     fun resolvePath(sourceName : String) : String

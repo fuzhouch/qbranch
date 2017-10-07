@@ -5,7 +5,7 @@ package net.dummydigit.qbranch.compiler.codegen
 
 import net.dummydigit.qbranch.compiler.Settings
 import net.dummydigit.qbranch.compiler.mocks.MockStringSourceCodeLoader
-import net.dummydigit.qbranch.compiler.mocks.MockStringTargetSaver
+import net.dummydigit.qbranch.compiler.mocks.MockStringTargetWriter
 import net.dummydigit.qbranch.compiler.parser.IntermediateConstruct
 import net.dummydigit.qbranch.compiler.parser.SourceTreeParser
 import org.junit.Assert
@@ -29,7 +29,7 @@ class KotlinTranslatorTest {
         val sortedSourceTree = parser.parse("test.bond")
         val construct = IntermediateConstruct(sortedSourceTree)
         val translator = KotlinTranslator(settings)
-        val saver = MockStringTargetSaver(65535)
+        val saver = MockStringTargetWriter(65535)
         val writer = OneFilePerInputSourceWriter(translator, saver)
         writer.generateTargetSource(construct)
         Assert.assertEquals(8, saver.savedContentArray.size)
@@ -59,7 +59,7 @@ class KotlinTranslatorTest {
         val sortedSourceTree = parser.parse("test.bond")
         val construct = IntermediateConstruct(sortedSourceTree)
         val translator = KotlinTranslator(settings)
-        val saver = MockStringTargetSaver(65535)
+        val saver = MockStringTargetWriter(65535)
         val writer = OneFilePerInputSourceWriter(translator, saver)
         writer.generateTargetSource(construct)
         println(saver.savedContent)

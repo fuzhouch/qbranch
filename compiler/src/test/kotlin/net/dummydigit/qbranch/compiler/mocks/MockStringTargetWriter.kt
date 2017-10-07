@@ -1,10 +1,10 @@
 package net.dummydigit.qbranch.compiler.mocks
 
-import net.dummydigit.qbranch.compiler.TargetCodeSaver
+import net.dummydigit.qbranch.compiler.TargetCodeWriter
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
-class MockStringTargetSaver(bufferSize : Int) : TargetCodeSaver {
+class MockStringTargetWriter(bufferSize : Int) : TargetCodeWriter {
     private val stream = ByteArrayOutputStream(bufferSize)
     var savedContent : String = ""
     var savedContentArray : Array<String> = arrayOf()

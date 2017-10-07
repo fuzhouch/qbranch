@@ -3,7 +3,7 @@
 
 package net.dummydigit.qbranch.compiler.parser
 
-import net.dummydigit.qbranch.compiler.FileSourceCodeLoader
+import net.dummydigit.qbranch.compiler.SourceCodeFileLoader
 import java.io.FileNotFoundException
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -43,7 +43,7 @@ class SourceFileLoaderTest {
     fun testLoadExistingFileWithoutInclude() {
         val testPath = getTestAbsolutePath(createFile = true)
         val settings = Settings()
-        val loader = FileSourceCodeLoader(settings)
+        val loader = SourceCodeFileLoader(settings)
         try {
             val stream = loader.openStream(testPath.toString())
             stream.close()
@@ -56,7 +56,7 @@ class SourceFileLoaderTest {
     fun testLoadNonExistFileWithoutInclude() {
         val testPath = getTestAbsolutePath(createFile = false)
         val settings = Settings()
-        val loader = FileSourceCodeLoader(settings)
+        val loader = SourceCodeFileLoader(settings)
         loader.openStream(testPath.toString())
     }
 
@@ -66,7 +66,7 @@ class SourceFileLoaderTest {
         val testPath = getTestAbsolutePath(homePath, createFile = false)
         val relativePath = homePath.relativize(testPath)
         val settings = Settings(includePaths = listOf(homePath.toString()))
-        val loader = FileSourceCodeLoader(settings)
+        val loader = SourceCodeFileLoader(settings)
         loader.openStream(relativePath.toString())
     }
 
@@ -76,7 +76,7 @@ class SourceFileLoaderTest {
         val testPath = getTestAbsolutePath(homePath, createFile = true)
         val relativePath = homePath.relativize(testPath)
         val settings = Settings(includePaths = listOf(homePath.toString()))
-        val loader = FileSourceCodeLoader(settings)
+        val loader = SourceCodeFileLoader(settings)
         try {
             val stream = loader.openStream(relativePath.toString())
             stream.close()
@@ -91,7 +91,7 @@ class SourceFileLoaderTest {
         val testPath = getTestAbsolutePath(currentPath, createFile = true)
         val relativePath = currentPath.relativize(testPath)
         val settings = Settings(includePaths = listOf())
-        val loader = FileSourceCodeLoader(settings)
+        val loader = SourceCodeFileLoader(settings)
         try {
             val stream = loader.openStream(relativePath.toString())
             stream.close()
