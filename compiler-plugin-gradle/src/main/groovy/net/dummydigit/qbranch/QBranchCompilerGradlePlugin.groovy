@@ -3,11 +3,12 @@
 package net.dummydigit.qbranch
 
 import net.dummydigit.qbranch.compiler.BondIdlCompiler
+import net.dummydigit.qbranch.compiler.Settings
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import net.dummydigit.qbranch.compiler.Settings
 
 class QBranchCompilerGradlePlugin implements Plugin<Project> {
+    @Override
     void apply(Project project) {
         String generatedPath = "${project.buildDir}/qbranch-generated"
         def extension = project.extensions.create('qbranch',
