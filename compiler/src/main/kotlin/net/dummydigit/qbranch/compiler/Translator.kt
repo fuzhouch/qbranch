@@ -6,6 +6,7 @@ package net.dummydigit.qbranch.compiler
 import net.dummydigit.qbranch.compiler.symbols.*
 
 internal interface Translator {
+    fun getGeneratedFileExt() : String
     fun generateHeader() : String
     fun generate(bulitinType : BuiltinTypeDef) : String
     fun generate(containerType : BuiltinContainerDef) : String

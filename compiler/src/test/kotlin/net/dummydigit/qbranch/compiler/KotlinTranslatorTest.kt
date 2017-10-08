@@ -31,7 +31,6 @@ class KotlinTranslatorTest {
         val saver = MockStringTargetWriter(65535)
         val writer = OneClassPerFileCodeGen(translator, saver)
         writer.generateTargetSource(construct)
-        saver.savedContentArray.forEach { println(it) }
         Assert.assertEquals(8, saver.savedContentArray.size)
         // NOTE: Don't test compiler version and name as
         // it does not work in unit test
@@ -62,6 +61,5 @@ class KotlinTranslatorTest {
         val saver = MockStringTargetWriter(65535)
         val writer = OneClassPerFileCodeGen(translator, saver)
         writer.generateTargetSource(construct)
-        println(saver.savedContent)
     }
 }

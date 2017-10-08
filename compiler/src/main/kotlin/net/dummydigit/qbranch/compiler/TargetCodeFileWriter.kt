@@ -23,7 +23,7 @@ class TargetCodeFileWriter(settings: Settings) : TargetCodeWriter {
         val packagePath = namespace.split('.')
                 .fold(outputRootPath, { cur, component -> cur.resolve(component) })
         if (Files.notExists(packagePath)) {
-            Files.createDirectory(packagePath)
+            Files.createDirectories(packagePath)
         }
         return packagePath
     }

@@ -41,8 +41,10 @@ subprojects {
 
     jar {
         manifest {
+            attributes("Name": "net/dummydigit/net/qbranch/")
             attributes("Implementation-Title": "qbranch")
-                attributes("Implementation-Version": version)
+            attributes("Implementation-Version": version)
+            attributes("Implementation-Vendor": 'fuzhouch@gmail.com')
         }
     }
 
