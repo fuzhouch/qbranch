@@ -9,16 +9,12 @@ class MockStringTargetWriter(bufferSize : Int) : TargetCodeWriter {
     var savedContent : String = ""
     var savedContentArray : Array<String> = arrayOf()
 
-    override fun openStream(sourceName: String): OutputStream {
+    override fun openTargetCodeAsStream(namespace : String, symbolName : String) : OutputStream {
         return stream
     }
 
     override fun onSaveDone() {
         savedContent = stream.toString("UTF-8")
         savedContentArray = savedContent.split("\n").toTypedArray()
-    }
-
-    override fun resolvePath(sourceName: String): String {
-        return sourceName
     }
 }

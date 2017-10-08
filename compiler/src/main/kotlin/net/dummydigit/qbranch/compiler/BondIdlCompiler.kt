@@ -3,9 +3,6 @@
 
 package net.dummydigit.qbranch.compiler
 
-import net.dummydigit.qbranch.compiler.codegen.KotlinTranslator
-import net.dummydigit.qbranch.compiler.codegen.OneFilePerInputSourceWriter
-import net.dummydigit.qbranch.compiler.codegen.Translator
 import net.dummydigit.qbranch.compiler.exceptions.UnsupportedCodeGeneratorException
 import net.dummydigit.qbranch.compiler.parser.*
 
@@ -27,7 +24,7 @@ class BondIdlCompiler(compilerSettings: Settings,
         val parser = SourceTreeParser(sourceCodeLoader)
         val sourceTreeList = parser.parse(inputSource)
         val construct = IntermediateConstruct(sourceTreeList)
-        val writer = OneFilePerInputSourceWriter(translator, targetCodeWriter)
+        val writer = OneClassPerFileCodeGen(translator, targetCodeWriter)
         writer.generateTargetSource(construct)
     }
 

@@ -1,9 +1,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root
 // for full license information.
 
-package net.dummydigit.qbranch.compiler.codegen
+package net.dummydigit.qbranch.compiler
 
-import net.dummydigit.qbranch.compiler.Settings
 import net.dummydigit.qbranch.compiler.mocks.MockStringSourceCodeLoader
 import net.dummydigit.qbranch.compiler.mocks.MockStringTargetWriter
 import net.dummydigit.qbranch.compiler.parser.IntermediateConstruct
@@ -30,8 +29,9 @@ class KotlinTranslatorTest {
         val construct = IntermediateConstruct(sortedSourceTree)
         val translator = KotlinTranslator(settings)
         val saver = MockStringTargetWriter(65535)
-        val writer = OneFilePerInputSourceWriter(translator, saver)
+        val writer = OneClassPerFileCodeGen(translator, saver)
         writer.generateTargetSource(construct)
+        saver.savedContentArray.forEach { println(it) }
         Assert.assertEquals(8, saver.savedContentArray.size)
         // NOTE: Don't test compiler version and name as
         // it does not work in unit test
@@ -60,7 +60,7 @@ class KotlinTranslatorTest {
         val construct = IntermediateConstruct(sortedSourceTree)
         val translator = KotlinTranslator(settings)
         val saver = MockStringTargetWriter(65535)
-        val writer = OneFilePerInputSourceWriter(translator, saver)
+        val writer = OneClassPerFileCodeGen(translator, saver)
         writer.generateTargetSource(construct)
         println(saver.savedContent)
     }

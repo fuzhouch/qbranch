@@ -6,7 +6,6 @@ package net.dummydigit.qbranch.compiler
 import java.io.OutputStream
 
 interface TargetCodeWriter {
-    fun openStream(sourceName : String) : OutputStream
+    fun openTargetCodeAsStream(namespace : String, symbolName : String) : OutputStream
     fun onSaveDone()
-    fun resolvePath(sourceName : String) : String
 }

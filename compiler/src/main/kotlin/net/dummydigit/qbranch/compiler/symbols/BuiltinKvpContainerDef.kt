@@ -4,7 +4,7 @@
 package net.dummydigit.qbranch.compiler.symbols
 
 import net.dummydigit.qbranch.compiler.SourceCodeInfo
-import net.dummydigit.qbranch.compiler.codegen.Translator
+import net.dummydigit.qbranch.compiler.Translator
 
 internal class BuiltinKvpContainerDef(sourceCodeInfo: SourceCodeInfo,
                                       typeName : String,

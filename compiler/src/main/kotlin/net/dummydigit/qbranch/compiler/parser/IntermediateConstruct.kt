@@ -15,9 +15,9 @@ internal class IntermediateConstruct(sourceTreeList : List<IdlDefinition>) {
         val builtinNamespaceName = "<builtin>"
     }
 
-    val symbolTableBySource = HashMap<String, IdlDefinition>()
-    val symbolTableByNamespace = HashMap<String, HashSet<Symbol>>()
-    private val importToNamespace = HashMap<String, String>()
+    val symbolTableBySource = HashMap<String, IdlDefinition>() // Key = sourceCodePath, Value = syntaxTree
+    val symbolTableByNamespace = HashMap<String, HashSet<Symbol>>() // Key = namespace, Value = symbols
+    val importToNamespace = HashMap<String, String>() // Key = sourceCodePath, Value = namespace
 
     init {
         val walker = ParseTreeWalker()

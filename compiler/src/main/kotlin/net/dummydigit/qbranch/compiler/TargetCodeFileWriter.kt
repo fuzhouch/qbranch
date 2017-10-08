@@ -8,24 +8,23 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class TargetCodeFileWriter(private val settings: Settings) : TargetCodeWriter {
-    override fun openStream(sourceName: String): OutputStream {
-        return Files.newOutputStream(resolvePathInternal(sourceName))
+class TargetCodeFileWriter(settings: Settings) : TargetCodeWriter {
+
+    private val outputRootPath = Paths.get(settings.outputRootPath).toAbsolutePath()
+
+    override fun onSaveDone() { /* no need to do anything for now */ }
+
+    override fun openTargetCodeAsStream(namespace : String, symbolName : String) : OutputStream {
+        val packagePath = createPackagePathByNamespace(namespace)
+        return Files.newOutputStream(packagePath.resolve(symbolName))
     }
 
-    override fun resolvePath(sourceName: String): String {
-        return this.resolvePathInternal(sourceName).toString()
-    }
-
-    override fun onSaveDone() { /* no need to do anything */ }
-
-    private fun resolvePathInternal(sourceName: String) : Path {
-        val outputPath = Paths.get(sourceName)
-        return when {
-            outputPath.isAbsolute -> outputPath
-            settings.outputRootPath.isEmpty() -> outputPath.toRealPath()
-            else -> ParsingUtil.buildOutputFileName(outputPath.toString(),
-                    settings.outputRootPath)
+    private fun createPackagePathByNamespace(namespace : String) : Path {
+        val packagePath = namespace.split('.')
+                .fold(outputRootPath, { cur, component -> cur.resolve(component) })
+        if (Files.notExists(packagePath)) {
+            Files.createDirectory(packagePath)
         }
+        return packagePath
     }
 }
