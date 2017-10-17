@@ -18,8 +18,9 @@ class SourceFileLoaderTest {
     }
 
     private fun getAbsoluteHomePath() : Path {
-        val envName = if (isMicrosoftWindows()) { "USERPROFILE" } else { "HOME" }
-        val homePath = Paths.get(System.getenv()[envName]).toRealPath()
+        // ref: https://stackoverflow.com/questions/585534/what-is-the-best-way-to-find-the-users-home-directory-in-java
+        // Note that USERPROFILE doesn't always work on bash.exe
+        val homePath = Paths.get(System.getProperty("user.home")).toRealPath()
         Assert.assertTrue(homePath.isAbsolute)
         return homePath
     }
