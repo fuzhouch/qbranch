@@ -104,11 +104,71 @@ internal class KotlinTranslator(settings : Settings) : Translator {
         return "package ${namespaceDef.namespace}\n"
     }
 
-    override fun generate(structDef : StructDef) : String {
-        if (!structDef.isViewOf) {
-            val structHeader = "${generateCodeGenTag()}\nopen class ${structDef.name} {"
+    private fun generateStructTypeParamListStmt(structDef : StructDef) : String {
+        return if (structDef.isGeneric) {
+            structDef.genericTypeParamList
+                    .map { "$it : Any" }
+                    .joinToString(separator = ",", prefix = "<", postfix = ">")
+        } else {
+            ""
         }
-        return "" // TODO
+    }
+
+    private fun generateStructTypeHintName(structDef : StructDef) : String {
+        return "${structDef.name}T"
+    }
+
+    private fun generateStructConstructorStmt(structDef : StructDef) : String {
+        return if (structDef.isGeneric) {
+            val typeHintName = generateStructTypeHintName(structDef)
+            val typeParams = structDef.genericTypeParamList.joinToString(",")
+            "(qTypeHint : $typeHintName<$typeParams>)"
+        } else {
+            ""
+        }
+    }
+
+    private fun generateStructDeclStmt(structDef : StructDef) : String {
+        return if (structDef.isGeneric) {
+            val typeParams = generateStructTypeParamListStmt(structDef)
+            "open class ${structDef.name}$typeParams"
+        } else {
+            "open class ${structDef.name}"
+        }
+    }
+
+    private fun generateStructTypeRefStmt(structDef : StructDef) : String {
+        return ""
+    }
+
+    private fun generateStructBaseClassDeclStmt(structDef : StructDef) : String {
+        return if (structDef.hasBaseClass) {
+            val baseClassDef = structDef.baseClass!! as StructDef
+            if (structDef.isGeneric) {
+                ""
+            } else {
+                " : ${baseClassDef.name}"
+            }
+        } else {
+            ""
+        }
+    }
+
+    override fun generate(structDef : StructDef) : String {
+        if (structDef.isViewOf) {
+            throw NotImplementedError("viewOf:${structDef.name}")
+        }
+
+        if (structDef.isForwardDeclaration) {
+            // Do nothing - Java world does not need this.
+            return ""
+        }
+
+        val structDeclStmt = generateStructDeclStmt(structDef)
+        val ctorStmt = generateStructConstructorStmt(structDef)
+        val baseClassStmt = generateStructBaseClassDeclStmt(structDef)
+
+        return "$structDeclStmt$ctorStmt"
     }
 
     override fun generate(structField: StructFieldDef) : String {
