@@ -1,6 +1,7 @@
 package net.dummydigit.qbranch.ut.mocks;
 
 import net.dummydigit.qbranch.QBranchSerializable;
+import net.dummydigit.qbranch.annotations.FieldId;
 import net.dummydigit.qbranch.annotations.QBranchGeneratedCode;
 import net.dummydigit.qbranch.generic.QTypeArg;
 import net.dummydigit.qbranch.generic.StructT;
@@ -9,21 +10,30 @@ import net.dummydigit.qbranch.generic.StructT;
 public class JGenericTypeBase<T1, T2> implements QBranchSerializable {
 
     public JGenericTypeBase(JGenericTypeBaseT<T1, T2> qTypeArgs) {
-        baseFieldT1 = qTypeArgs.getBaseFieldT1().newInstance();
-        baseFieldT2 = qTypeArgs.getBaseFieldT2().newInstance();
+        baseFieldT1 = qTypeArgs.getBaseFieldT1T().newInstance();
+        baseFieldT2 = qTypeArgs.getBaseFieldT2T().newInstance();
     }
+
+    private @FieldId(id = 0) T1 baseFieldT1;
+    private T2 baseFieldT2;
+    public T1 getBaseFieldT1() { return baseFieldT1; }
+    public T2 getBaseFieldT2() { return baseFieldT2; }
+    public void setBaseFieldT1(T1 newValue) { baseFieldT1 = newValue; }
+    public void setBaseFieldT2(T2 newValue) { baseFieldT2 = newValue; }
+
+    // =======================================================================
+    // For codegen
+    // =======================================================================
 
     private JGenericTypeBase() { }
 
-    private T1 baseFieldT1;
-    private T2 baseFieldT2;
-
     public static class JGenericTypeBaseT<T1, T2> extends StructT<JGenericTypeBase<T1, T2>> {
 
-        public JGenericTypeBaseT(QTypeArg<T1> qTypeArgT1, QTypeArg<T2> qTypeArgT2) {
-            this.baseFieldT1 = qTypeArgT1;
-            this.baseFieldT2 = qTypeArgT2;
-            this.refObj = new JGenericTypeBase<>(); // Light weight object. Just to get class
+        private JGenericTypeBaseT(QTypeArg<T1> qTypeArgT1, QTypeArg<T2> qTypeArgT2,
+                                  Class<JGenericTypeBase<T1, T2>> cls) {
+            this.baseFieldT1T = qTypeArgT1;
+            this.baseFieldT2T = qTypeArgT2;
+            this.cls = cls;
         }
 
         @Override
@@ -37,26 +47,27 @@ public class JGenericTypeBase<T1, T2> implements QBranchSerializable {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public Class<JGenericTypeBase<T1, T2>> getGenericType() {
-            return (Class<JGenericTypeBase<T1, T2>>)refObj.getClass();
+            return cls;
         }
 
-        private QTypeArg<T1> baseFieldT1;
-        private QTypeArg<T2> baseFieldT2;
-        private JGenericTypeBase<T1, T2> refObj;
+        private QTypeArg<T1> baseFieldT1T;
+        private QTypeArg<T2> baseFieldT2T;
+        private Class<JGenericTypeBase<T1, T2>> cls;
 
-        public QTypeArg<T1> getBaseFieldT1() {
-            return baseFieldT1;
+        public QTypeArg<T1> getBaseFieldT1T() {
+            return baseFieldT1T;
         }
 
-        public QTypeArg<T2> getBaseFieldT2() {
-            return baseFieldT2;
+        public QTypeArg<T2> getBaseFieldT2T() {
+            return baseFieldT2T;
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static<T1, T2> JGenericTypeBaseT asQTypeArg(QTypeArg<T1> qTypeArgT1, QTypeArg<T2> qTypeArgT2) {
-        return new JGenericTypeBaseT<>(qTypeArgT1, qTypeArgT2);
+        JGenericTypeBase<T1, T2> refObj = new JGenericTypeBase<>();
+        return new JGenericTypeBaseT<>(qTypeArgT1, qTypeArgT2, (Class<JGenericTypeBase<T1, T2>>)refObj.getClass());
     }
 }
 

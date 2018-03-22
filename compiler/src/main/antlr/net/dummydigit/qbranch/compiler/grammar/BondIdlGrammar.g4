@@ -120,13 +120,15 @@ VIEW_OF_KEYWORD : WS+'view_of'WS+ ;
 NAMESPACE_KEYWORD : 'namespace'WS+ ;
 STRUCT_TYPE_KEYWORD : 'struct'WS+ ;
 ENUM_TYPE_KEYWORD : 'enum'WS+ ;
+BOOL_TYPE_KEYWORD : 'bool' ;
 SIGNED_INTEGER_TYPE_KEYWORD : 'int8' | 'int16' | 'int32' | 'int64' ;
 UNSIGNED_INTEGER_TYPE_KEYWORD : 'uint8' | 'uint16' | 'uint32' | 'uint64' ;
 FLOAT_POINT_TYPE_KEYWORD : 'float' | 'double' ;
 CONTAINER_TYPE_KEYWORD : 'vector' | 'list' | 'map' | 'set' | 'nullable' ;
 BYTESTRING_TYPE_KEYWORD : 'string' ;
 WSTRING_TYPE_KEYWORD : 'wstring' ;
-NON_CONTAINER_TYPE_KEYWORD : SIGNED_INTEGER_TYPE_KEYWORD
+NON_CONTAINER_TYPE_KEYWORD : BOOL_TYPE_KEYWORD
+                           | SIGNED_INTEGER_TYPE_KEYWORD
                            | UNSIGNED_INTEGER_TYPE_KEYWORD
                            | FLOAT_POINT_TYPE_KEYWORD
                            | BYTESTRING_TYPE_KEYWORD
